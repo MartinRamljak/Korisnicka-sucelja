@@ -23,7 +23,7 @@
 
 ### Semester Assignments
 
-- Link to Assignment 1: [**Assignment 1**](URL_TO_ASSIGNMENT_1)
+- Link to Assignment 1: [**Assignment 1**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Assignment_1_Figma_essentials.mp4)
 
 ## Project Requirements
 
