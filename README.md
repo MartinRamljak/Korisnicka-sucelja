@@ -24,6 +24,7 @@
 ### Semester Assignments
 
 - Link to Assignment 1: [**Assignment 1**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Assignment_1_Figma_essentials.mp4)
+- Link to Assignment 2: [**Assignment 2**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/PROFILI KORISNIKA I INFORMACIJSKA ARHITEKTURA.pdf)
 
 ## Project Requirements
 
