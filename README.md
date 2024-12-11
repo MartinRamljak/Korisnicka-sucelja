@@ -26,6 +26,8 @@
 - Link to Assignment 1: [**Assignment 1**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Assignment_1_Figma_essentials.mp4)
 - Link to Assignment 2: [**Assignment 2**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/PROFILI%20KORISNIKA%20I%20INFORMACIJSKA%20ARHITEKTURA.pdf)
 - Link to Assignment 3: [**Assignment 3**](https://korisnicka-sucelja-tpes.vercel.app)
+- Link to Assignment 4:
+[**Assignment 4 - high fidelity**](https://www.figma.com/proto/OHJEVA4KuW6URPLyYBpGeR/Untitled?node-id=8-124&node-type=canvas&t=pbxMrkD4YBvSbnOT-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
 
 ## Project Requirements
 
