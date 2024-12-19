@@ -1,4 +1,9 @@
 import { Navigation } from "../navigation";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User_profile",
+};
 
 export default function OsobniProfilPage() {
   return (
