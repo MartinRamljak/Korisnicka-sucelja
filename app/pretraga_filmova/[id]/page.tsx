@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BASE_API_URL } from "../page";
+import { BASE_API_URL } from "../url";
 import type { Movie } from "../page";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
@@ -20,7 +20,8 @@ async function getMovie(id: string): Promise<Movie> {
 }
 
 export default async function SearchedMovie({ params }: MoviesProps) {
-  const movie = await getMovie(params.id);
+  const paramsAwaited = await params;
+  const movie = await getMovie(paramsAwaited.id);
   const { id, title, body } = movie;
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
