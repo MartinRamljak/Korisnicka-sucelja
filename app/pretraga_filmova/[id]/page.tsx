@@ -8,8 +8,10 @@ export const metadata: Metadata = {
   title: "Movie_search",
 };
 
+type Params = Promise<{ id: string }>;
+
 type MoviesProps = {
-  params: { id: string };
+  params: Params;
 };
 
 async function getMovie(id: string): Promise<Movie> {
