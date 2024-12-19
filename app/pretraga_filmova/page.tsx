@@ -23,8 +23,11 @@ type MovieImg = {
   thumbnailUrl: string;
 };
 
+
+type Params = Promise<{ page: string }>;
+
 type MoviesPageProps = {
-  searchParams: { page: string };
+  searchParams: Params;
 };
 
 type PagingInfo = {
@@ -150,7 +153,7 @@ function Pagination(pagination: PaginationProps) {
 export default async function MoviesPage({ searchParams }: MoviesPageProps ) {
   const moviesCount = await getMoviesCount();
   const pagesCount = Math.ceil(moviesCount / PAGE_SIZE);
-  const searchParamsAwaited = searchParams;
+  const searchParamsAwaited = await searchParams;
   // Ensure the page number is a positive integer.
   const currentPage = Math.min(
     /^[1-9][0-9]*$/.test(searchParamsAwaited.page) ? Number(searchParamsAwaited.page) : 1,
