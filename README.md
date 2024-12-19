@@ -29,6 +29,7 @@
 - Link to Assignment 4:
 [**Assignment 4 - low fidelity**](https://www.figma.com/proto/OHJEVA4KuW6URPLyYBpGeR/Untitled?node-id=49-304&node-type=canvas&t=ttTdnjqMSQxTK6yi-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
 [**Assignment 4 - high fidelity**](https://www.figma.com/proto/OHJEVA4KuW6URPLyYBpGeR/Untitled?node-id=8-124&node-type=canvas&t=pbxMrkD4YBvSbnOT-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1)
+- Link to Assignment 5: [**Assignment 5**](https://korisnicka-sucelja-dent.vercel.app)
 
 ## Project Requirements
 
