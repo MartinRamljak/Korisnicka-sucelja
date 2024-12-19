@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BASE_API_URL } from "./url";
 
 export type Movie = {
   userId: number;
@@ -40,7 +41,6 @@ export const metadata: Metadata = {
   title: "Movie_search",
 };
 
-export const BASE_API_URL = "https://jsonplaceholder.typicode.com";
 const PAGE_SIZE = 4;
 
 async function getMovies({
