@@ -147,10 +147,10 @@ function Pagination(pagination: PaginationProps) {
   );
 }
 
-export default async function MoviesPage({ searchParams }: MoviesPageProps) {
+export default async function MoviesPage({ searchParams }: MoviesPageProps ) {
   const moviesCount = await getMoviesCount();
   const pagesCount = Math.ceil(moviesCount / PAGE_SIZE);
-  const searchParamsAwaited = await searchParams;
+  const searchParamsAwaited = searchParams;
   // Ensure the page number is a positive integer.
   const currentPage = Math.min(
     /^[1-9][0-9]*$/.test(searchParamsAwaited.page) ? Number(searchParamsAwaited.page) : 1,
