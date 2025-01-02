@@ -5,11 +5,11 @@ export const metadata: Metadata = {
   title: "User_discussions",
 };
 
-export default function KorisnickeDiskusijePage() {
+export default function UserDiscussionsPage() {
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
       <Navigation />
-      <h1 className="text-6xl font-extrabold tracking-tight">Korisnicke Diskusije</h1>
+      <h1 className="text-6xl font-extrabold tracking-tight">Discussions</h1>
     </main>
   );
 }

@@ -5,26 +5,22 @@ type Page = {
   
   // We hardcode pages here, but you could get this information from some external source (e.g. CMS, DB, config file, etc).
   const pages: Page[] = [
-    { title: "Naslovnica", path: "/" },
+    { title: "Home", path: "/" },
     {
-      title: "Pretraga filmova",
-      path: "/pretraga_filmova",
+      title: "Collections",
+      path: "/collections",
     },
     {
-      title: "Recenzije",
-      path: "/recenzije",
+      title: "Review",
+      path: "/reviews",
     },
     {
-      title: "Kolekcije",
-      path: "/kolekcije",
+      title: "Discussions",
+      path: "/discussions",
     },
     {
-      title: "Osobni profil",
-      path: "/osobni_profil",
-    },
-    {
-      title: "Korisnicke diskusije",
-      path: "/korisnicke_diskusije",
+      title: "Login/Signup",
+      path: "/user_profile",
     },
   ];
   

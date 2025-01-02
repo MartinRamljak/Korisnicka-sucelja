@@ -5,11 +5,11 @@ export const metadata: Metadata = {
   title: "User_profile",
 };
 
-export default function OsobniProfilPage() {
+export default function UserProfilePage() {
   return (
     <main className="flex min-h-screen flex-col items-center p-10">
       <Navigation />
-      <h1 className="text-6xl font-extrabold tracking-tight">Osobni profil</h1>
+      <h1 className="text-6xl font-extrabold tracking-tight">Login/Signup</h1>
     </main>
   );
 }
