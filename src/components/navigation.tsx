@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Page = {
     title: string;
     path: `/${string}`;
@@ -27,11 +29,11 @@ type Page = {
   function processPage(page: Page, index: number) {
     return (
       <li key={index}>
-        <a href={page.path}>{page.title}</a>
+        <Link href={page.path}>{page.title}</Link>
       </li>
     );
   }
   
   export function Navigation() {
-  return <ul className="flex space-x-4 mb-4">{pages.map(processPage)}</ul>;
+    return <ul className="flex space-x-4 mb-4">{pages.map(processPage)}</ul>;
 }
