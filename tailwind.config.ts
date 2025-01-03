@@ -12,6 +12,9 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        'primary': '#AC3F25',
+        'dark-primary': '#79321D',
+        'secondary': '#FFB700',
       },
       fontFamily: {
         oswald: ["var(--font-oswald)"],

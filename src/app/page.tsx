@@ -1,4 +1,4 @@
-import { Navigation } from "../components/navigation";
+import { Navigation } from "../components/navigation/navigation";
 import Header from "../components/header/header";
 import type { Metadata } from "next";
 
