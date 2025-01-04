@@ -1,4 +1,4 @@
-.nav-bg{
+.navbg{
     position: relative;
     display: flex;
     justify-content: space-around;
@@ -7,12 +7,11 @@
     border-bottom: 4px solid var(--primary);
 }
 
-.nav-list{
-    display: flex;
+.navlist{
     justify-content: space-around;
     list-style: none;
     width: 100%;
-    font-size: x-large;
+    font-size: clamp(0.2rem, 2.5vw, 1.5rem);
     padding: 6px;
 }
 
@@ -49,11 +48,14 @@
     background-color: var(--primary);
     color: white;
     border: none;
-    padding: 3px 10px;
+    padding: 1px 5px;
     border-radius: 7px;
     cursor: pointer;
-    box-shadow: 1px 1px 10px 0px black;
+    box-shadow: 1px 0.5px 5px 0px black;
     transition: background-color 300ms ease;
+    display: inline-block; /* Make the span inline-block to cover the text */
+    width: 100%; /* Make it span the entire width of the text */
+    text-align: center; /* Optional: This ensures the text inside is centered */
 }
 
 .nav-list-button:hover{
