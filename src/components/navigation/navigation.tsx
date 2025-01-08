@@ -10,7 +10,6 @@ type Page = {
     path: `/${string}`;
   };
   
-  // We hardcode pages here, but you could get this information from some external source (e.g. CMS, DB, config file, etc).
   const pages: Page[] = [
     { title: "Home", path: "/" },
     {

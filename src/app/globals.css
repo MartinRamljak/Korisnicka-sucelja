@@ -7,6 +7,7 @@
   --foreground: #ededed;
   --primary: #AC3F25;
   --dark-primary: #79321D;
+  --light-primary: #e8dbd8;
   --secondary: #FFB700;
 }
 
@@ -27,6 +28,12 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+input::placeholder {
+  color: grey;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 400;
 }
 
 /* .movie-result {
