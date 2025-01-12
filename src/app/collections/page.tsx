@@ -1,6 +1,8 @@
 import { Navigation } from "../../components/navigation/navigation";
 import Header from "../../components/header/header";
 import type { Metadata } from "next";
+import { Collections } from "@/src/components/collections/collections";
+import { Footer } from "@/src/components/footer/footer";
 
 export const metadata: Metadata = {
   title: "Collections",
@@ -12,6 +14,8 @@ export default function CollectionsPage() {
       <Header />
       <Navigation />
       <h1 className="text-6xl font-extrabold tracking-tight">Collections</h1>
+      <Collections />
+      <Footer />
     </main>
   );
 }
