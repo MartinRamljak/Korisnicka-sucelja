@@ -18,7 +18,6 @@ const Search = () => {
                 backgroundPosition: '50% 50%',
                 backgroundRepeat: 'no-repeat',
             }}></input>
-            {/* <img src="../../images/search_icon.png"></img> */}
         </div>
     );
     }

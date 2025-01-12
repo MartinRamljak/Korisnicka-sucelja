@@ -1,0 +1,54 @@
+.title {
+    padding-left: 20px;
+    border-left: 3px solid var(--primary);
+    font-size: clamp(1rem, 5vw, 2.2rem);
+}
+
+.scroll-container {
+    height: clamp(100px, 30vw, 440px);
+    max-width: 700px;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
+
+.scroll-button {
+    align-self: center;
+    height: clamp(50px, 20%, 150px);
+    border-width: 3px;
+    border-color: grey;
+    padding: 0 clamp(0px, 1vw, 20px) 0 clamp(5px, 1vw, 20px);
+}
+
+.items-container {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0 30px 0 30px;
+}
+
+.main-container {
+    height: clamp(100px, 30vw, 440px);
+    aspect-ratio: 16/11;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.desktop {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0 30px 0 30px;
+    background-image: url('/images/reel.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+@media screen and (max-width: 768px) {
+    .search-bar-container {
+        padding: 20px 5px 0 5px;
+    }
+  }
