@@ -33,6 +33,7 @@
 - Link to Assignment 6:
 [**Assignment 6 - desktop prototype**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Desktop%20-%204.png)
 [**Assignment 6 - mobile prototyle**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Android%20Compact.png)
+[**Assignment 6 - Vercel deployment**](https://korisnicka-sucelja-cxne.vercel.app)
 
 ## Project Requirements
 
