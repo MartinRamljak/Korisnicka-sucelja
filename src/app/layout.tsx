@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Oswald, Raleway } from 'next/font/google'
+import { Oswald, Raleway, Caladea } from 'next/font/google'
 import "./globals.css";
 
 /*const geistSans = localFont({
@@ -23,6 +23,12 @@ const bodyFont = Raleway ({
   subsets: ['latin'],
 })
 
+const statsFont = Caladea ({
+  variable: "--font-caladea",
+  subsets: ['latin'],
+  weight: "400",
+})
+
 /*const bodyFont = localFont({
   src:"/fonts/Raleway.woff",
   variable: "--font-raleway",
@@ -42,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${headerFont.variable} ${bodyFont.variable} antialiased`}
+        className={`${headerFont.variable} ${bodyFont.variable} ${statsFont.variable} antialiased`}
       >
         {children}
       </body>

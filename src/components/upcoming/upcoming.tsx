@@ -1,8 +1,9 @@
 import styles from "./upcoming.module.css"
 
-const Upcoming = () => {
+const Upcoming = (props:any) => {
+    const classes = props.show==="hidden"?"hidden":"movie-container";
     return (
-        <div className={styles["movie-container"]}
+        <div className={styles[classes]}
         style={{
             backgroundImage: "url('/images/temp.png')",
             backgroundSize: "100% 80%",

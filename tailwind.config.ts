@@ -19,6 +19,7 @@ export default {
       fontFamily: {
         oswald: ["var(--font-oswald)"],
         raleway: ["var(--font-raleway)"],
+        caladea: ["var(--font-caladea)"],
       },
     },
   },
