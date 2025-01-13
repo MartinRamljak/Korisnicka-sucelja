@@ -100,7 +100,7 @@ function processCollection1(collection: Collection, index: number) {
     return (
       <div className="flex-col justify-center w-9/12 h-fit">
         <h1
-          className="pl-2 border-l-4 border-primary"
+          className="pl-2 mt-12 border-l-4 border-primary"
           style={{ fontSize: 'clamp(1.5rem, 2vw, 4.375rem)' }}
         >
           Collections
