@@ -35,52 +35,60 @@ const collections: Collection[] = [
   },
 ];
 
+
 function processCollection(collection: Collection, index: number) {
     return (
-      <div key={index} className="w-60 mx-auto" style={{ transform: "scale(0.8)" }}>
+      <div key={index}  className="flex flex-col justify-between w-full max-w-[1200px] mx-auto h-full" style={{ transform: "scale(0.8)" }}>
         {/* Container for the images */}
-        <div className="relative w-full aspect-[2/3]">
+        <div className="relative h-96">
           {collection.images.map((image, idx) => (
             <div
-                key={idx}
-                className={`absolute 
-                ${idx === 0 ? 'top-0 left-0' : idx === 1 ? 'top-2 left-20' : 'top-4 left-40 px-5'} 
-                w-[70%] sm:w-[60%] md:w-[100%] lg:w-[100%] 
-                h-[70%] sm:h-[60%] md:h-[100%] lg:h-[100%] 
+              key={idx}
+              className={`absolute w-[66.67%] h-[100%] aspect-[2/3]
+                ${idx === 0 ? 'top-0 left-0' : idx === 1 ? 'top-4 left-10' : 'top-8 left-20'} 
+                w-full h-full 
                 z-${30 - idx * 10}`}
-          >
-              <Image src={image.src} alt={image.alt} layout="fill" objectFit="cover" />
-        </div>
+            >
+              <Image src={image.src} 
+                    alt={image.alt} layout="fill" objectFit="contain" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"/>
+            </div>
           ))}
         </div>
         {/* Title below the images */}
-        <h2 className="mb-4 mt-7 hover:text-primary cursor-pointer" style={{ fontSize: "clamp(1.5rem, 2vw, 4.375rem)" }}>{collection.title}</h2>
+        <h2
+          className="mb-4 mt-7 hover:text-primary cursor-pointer"
+          style={{ fontSize: "clamp(1.5rem, 2vw, 4.375rem)" }}
+        >
+          {collection.title}
+        </h2>
       </div>
     );
   }
   
   
-
   export function Collections() {
     return (
-      <div>
-        <h1 className="pl-2 border-l-4 border-primary" style={{ fontSize: "clamp(1.5rem, 2vw, 4.375rem)" }}>
+      <div className="w-9/12">
+        <h1
+          className="pl-2 border-l-4 border-primary"
+          style={{ fontSize: 'clamp(1.5rem, 2vw, 4.375rem)' }}
+        >
           Collections
         </h1>
   
         {/* For small screens, only show the first collection */}
-        <div className="lg:hidden mr-2">
+        <div className="lg:hidden">
           {processCollection(collections[0], 0)}
         </div>
   
         {/* For medium and larger screens, show all three collections in a row */}
-        <div className="hidden lg:flex lg:space-x-8 lg:justify-center lg:gap-32">
+        <div className="hidden lg:flex lg:justify-between w-full">
           {collections.map((collection, index) => (
-            <div key={index} className="w-60">
-              {processCollection(collection, index)}
-            </div>
+              processCollection(collection, index)
           ))}
         </div>
       </div>
     );
   }
+  
+  
