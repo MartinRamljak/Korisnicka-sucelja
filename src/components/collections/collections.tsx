@@ -35,36 +35,6 @@ const collections: Collection[] = [
   },
 ];
 
-
-function processCollection1(collection: Collection, index: number) {
-    return (
-      <div key={index}  className="flex flex-col justify-between gap-4 w-full max-w-[1200px] mx-auto" style={{ transform: "scale(0.8)" }}>
-        {/* Container for the images */}
-        <div className="flex justify-between relative w-10/12 h-[50vh]">
-          {collection.images.map((image, idx) => (
-            <div
-              key={idx}
-              className={`absolute aspect-[2/3]
-                ${idx === 0 ? 'top-0 left-0' : idx === 1 ? 'top-4 left-10' : 'top-8 left-20'} 
-                w-full h-full 
-                z-${30 - idx * 10}`}
-            >
-              <Image src={image.src} 
-                    alt={image.alt} layout="fill" className="object-contain" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"/>
-            </div>
-          ))}
-        </div>
-        {/* Title below the images */}
-        <h2
-          className="mb-4 mt-7 hover:text-primary cursor-pointer duration-300"
-          style={{ fontSize: "clamp(1.5rem, 2vw, 4.375rem)" }}
-        >
-          {collection.title}
-        </h2>
-      </div>
-    );
-  }
-
   function processCollection(collection: Collection, index: number) {
     return (
       <div key={index}  className="flex flex-col justify-center gap-4 w-full max-w-[1200px] mx-auto" style={{ transform: "scale(0.8)" }}>
