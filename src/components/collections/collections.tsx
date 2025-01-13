@@ -1,4 +1,3 @@
-import { Columns } from "lucide-react";
 import Image from "next/image";
 
 type Collection = {
