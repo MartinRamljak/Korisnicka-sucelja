@@ -1,17 +1,13 @@
 .movie-container {
-    height: 100%;
+    width: 100%;
     max-width: 740px;
+    min-width: 200px;
     height:80%;
     max-height: 440px;
+    min-height: 140px;
     aspect-ratio: 16/11;
     display: inline;
     position: relative;
-}
-
-.screenshot {
-    object-fit: contain;
-    max-width: 740px;
-    max-height: 80%;
 }
 
 .poster {
@@ -34,19 +30,6 @@
     left: 0;
 }
 
-.bottom {
-    z-index: 3;
-    object-fit: contain;
-    position: absolute;
-    bottom: 5%;
-    left: 0;
-}
-
-.flex {
-    display: flex;
-    flex-direction: row;
-}
-
 .info {
     position: absolute;
     bottom: 0%;
@@ -65,4 +48,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+
+.hidden {
+    display: none;
 }

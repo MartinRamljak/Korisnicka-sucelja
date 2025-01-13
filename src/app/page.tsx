@@ -1,8 +1,8 @@
 import { Navigation } from "../components/navigation/navigation";
 import Header from "../components/header/header";
 import Search from "../components/search/search";
-import Reel from "../components/reel/reel";
 import type { Metadata } from "next";
+import Scrollable from "../components/scrollable/scrollable";
 import { Footer } from "../components/footer/footer";
 import { Collections } from "../components/collections/collections";
 
@@ -16,7 +16,10 @@ export default function Home() {
       <Header />
       <Navigation />
       <Search />
-      <Reel showReel="no-reel" />
+      <Scrollable contentType="upcoming" title="Upcoming Releases"/>
+      <Scrollable contentType="reel" title="New in Theatres"/>
+      <Scrollable contentType="reel" title="Top this week"/>
+      
       <Collections />
       <Footer />
     </main>
