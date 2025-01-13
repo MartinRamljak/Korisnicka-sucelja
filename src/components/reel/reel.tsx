@@ -1,6 +1,10 @@
 import styles from "./reel.module.css"
 
-const Reel = (props:any) => {
+type Arg = {
+    show: string,
+}
+
+const Reel = (props:Arg) => {
     const classes = props.show==="hidden"?"hidden":"flex";
     return (
         <div className={styles[classes]}>

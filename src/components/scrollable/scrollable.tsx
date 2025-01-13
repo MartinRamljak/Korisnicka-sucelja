@@ -2,7 +2,12 @@ import styles from "./scrollable.module.css"
 import Upcoming from "../upcoming/upcoming";
 import Reel from "../reel/reel";
 
-var Scrollable = (props:any) => {
+type Args = {
+    contentType: string,
+    title: string,
+}
+
+const Scrollable = (props:Args) => {
     const upcoming = props.contentType==="upcoming"?"shown":"hidden";
     const reel = props.contentType==="reel"?"shown":"hidden";
     const scroll = props.contentType==="reel"?"scroll-container-reel":"scroll-container-upcoming";

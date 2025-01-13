@@ -3,6 +3,8 @@ import Header from "../components/header/header";
 import Search from "../components/search/search";
 import type { Metadata } from "next";
 import Scrollable from "../components/scrollable/scrollable";
+import { Footer } from "../components/footer/footer";
+import { Collections } from "../components/collections/collections";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -18,6 +20,8 @@ export default function Home() {
       <Scrollable contentType="reel" title="New in Theatres"/>
       <Scrollable contentType="reel" title="Top this week"/>
       
+      <Collections />
+      <Footer />
     </main>
   );
 }

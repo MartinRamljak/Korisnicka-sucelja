@@ -1,6 +1,10 @@
 import styles from "./upcoming.module.css"
 
-const Upcoming = (props:any) => {
+type Arg = {
+    show: string,
+}
+
+const Upcoming = (props:Arg) => {
     const classes = props.show==="hidden"?"hidden":"movie-container";
     return (
         <div className={styles[classes]}
