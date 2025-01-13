@@ -32,6 +32,7 @@
 - Link to Assignment 5: [**Assignment 5**](https://korisnicka-sucelja-dent.vercel.app)
 - Link to Assignment 6:
 [**Assignment 6 - desktop prototype**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Desktop%20-%204.png)
+[**Assignment 6 - mobile prototyle**](https://github.com/MartinRamljak/Korisnicka-sucelja/blob/main/Assignments/Android%20Compact.png)
 
 ## Project Requirements
 
