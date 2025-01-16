@@ -37,9 +37,17 @@ const collections: Collection[] = [
 
   function processCollection(collection: Collection, index: number) {
     return (
-      <div key={index}  className="flex flex-col justify-center gap-4 w-full max-w-[1200px] mx-auto" style={{ transform: "scale(0.8)" }}>
+      <div key={index}  
+      className="flex flex-col justify-center gap-4 
+                  w-full max-w-[1200px] mx-auto" 
+                  style={{ transform: "scale(0.8)" }}>
+
         {/* Container for the images */}
-        <div className="grid grid-cols-12 grid-rows-12 relative w-full h-[80vh]">
+        <div className="grid relative w-full h-[60vh]" 
+              style={{  gridTemplateColumns: "repeat(15, minmax(0, 1fr))" ,
+                        gridTemplateRows: "repeat(15, minmax(0, 1fr))"  
+              }}>
+                
           {collection.images.map((image, idx) => (
               <Image src={image.src} 
                     alt={image.alt} layout="fill" 
@@ -49,8 +57,8 @@ const collections: Collection[] = [
                       object-contain
                       w-full h-full 
                       z-${30 - idx * 10}`}
-                      style={{ gridColumn: idx === 0 ? '1/span 10' : idx === 1 ? '2/span 10' : '3/span 10',
-                      gridRow: idx === 0 ? '1/span 10' : idx === 1 ? '2/span 10' : '3/span 10' }}/>
+                      style={{ gridColumn: idx === 0 ? '1/span 13' : idx === 1 ? '2/span 13' : '3/span 13',
+                      gridRow: idx === 0 ? '1/span 13' : idx === 1 ? '2/span 13' : '3/span 13' }}/>
           ))}
         </div>
         {/* Title below the images */}
@@ -64,20 +72,21 @@ const collections: Collection[] = [
     );
   }
   
-  
   export function Collections() {
     return (
-      <div className="flex-col justify-center w-9/12 h-fit">
+      <div className="flex-col justify-around w-9/12 h-fit">
         <h1
-          className="pl-2 mt-12 border-l-4 border-primary"
+          className="pl-2 mt-20 border-l-4 border-primary"
           style={{ fontSize: 'clamp(1.5rem, 2vw, 4.375rem)' }}
         >
           Collections
         </h1>
         
         <div className="flex justify-between">
-          <Image src="/images/arrow_left.png" alt="Left arrow" width={20} height={20}
-          className="w-6 sm:w-8 md:w-10 self-center border-2 border-gray rounded-2xl p-2 hover:bg-primary cursor-pointer duration-300" />
+          <Image src="/images/arrow_left.png" alt="Left arrow" width={50} height={50}
+          className="self-center  w-10 md:w-12 md:py-5 md:px-2
+                    border-2 border-gray rounded-2xl p-2 
+                    hover:bg-primary cursor-pointer duration-300" />
           {/* For small screens, only show the first collection */}
           <div className="md:hidden w-2/3">
             {processCollection(collections[0], 0)}
@@ -96,8 +105,10 @@ const collections: Collection[] = [
                 processCollection(collection, index)
             ))}
           </div>
-          <Image src="/images/arrow_right.png" alt="Left arrow" width={20} height={20} 
-          className="w-6 sm:w-8 md:w-10 self-center border-2 border-gray rounded-2xl p-2 hover:bg-primary cursor-pointer duration-300" />
+          <Image src="/images/arrow_right.png" alt="Left arrow" width={50} height={50} 
+          className="self-center w-10 md:w-12 md:py-5 md:px-2
+                    border-2 border-gray rounded-2xl p-2 
+                    hover:bg-primary cursor-pointer duration-300" />
         </div>
       </div>
     );

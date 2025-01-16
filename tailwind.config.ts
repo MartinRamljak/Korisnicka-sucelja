@@ -15,6 +15,7 @@ export default {
         'primary': '#AC3F25',
         'dark-primary': '#79321D',
         'secondary': '#FFB700',
+        'light-primary': '#e8dbd8',
       },
       fontFamily: {
         oswald: ["var(--font-oswald)"],
