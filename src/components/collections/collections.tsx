@@ -43,7 +43,7 @@ const collections: Collection[] = [
                   style={{ transform: "scale(0.8)" }}>
 
         {/* Container for the images */}
-        <div className="grid relative w-full h-[60vh]" 
+        <div className="grid relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh]" 
               style={{  gridTemplateColumns: "repeat(15, minmax(0, 1fr))" ,
                         gridTemplateRows: "repeat(15, minmax(0, 1fr))"  
               }}>
