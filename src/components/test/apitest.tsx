@@ -1,45 +1,40 @@
-"use client"
-import { useEffect, useState } from "react";
+'use client';
 
-export default function MovieGenres() {
-  interface Genre {
-    id: number;
-    name: string;
-  }
+import { useEffect, useState } from 'react';
+import { getMovieGenres } from '@/src/lib/genres';
+import type { Genre, GenresResponse } from '@/src/types/types';
 
-  const [genres, setGenres] = useState<Genre[]>([]);
+export default function GenreList() {
+  const [genres, setGenres] = useState<Genre[]>([]); 
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchGenres() {
+    async function loadGenres() {
       try {
-        const response = await fetch("/api/genresRoute"); // Call your API route
-        if (!response.ok) {
-          throw new Error("Failed to fetch genres");
-        }
-        const data = await response.json();
-        setGenres(data.genres); // TMDB's response has a 'genres' key
+        const data = await getMovieGenres();
+        setGenres(data.genres); 
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
+        setError(err instanceof Error ? err.message : 'Failed to load genres');
+      } finally {
+        setLoading(false);
       }
     }
 
-    fetchGenres();
+    loadGenres();
   }, []);
 
-  if (error) return <p>Error: {error}</p>;
-  if (!genres.length) return <p>Loading genres...</p>;
+  if (loading) return <div>Loading genres...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
-      <h1>Movie Genres</h1>
+      <h2>Movie Genres</h2>
       <ul>
         {genres.map((genre) => (
-          <li key={genre.id}>{genre.name}</li>
+          <li key={genre.id}>
+            {genre.name} (ID: {genre.id})
+          </li>
         ))}
       </ul>
     </div>
