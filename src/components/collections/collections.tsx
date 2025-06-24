@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MovieCollection } from "@/src/types/types";
 
 type Collection = {
   title: string;
@@ -113,5 +114,3 @@ const collections: Collection[] = [
       </div>
     );
   }
-  
-  

@@ -8,7 +8,6 @@ export interface GenresResponse {
   genres: Genre[];
 }
 
-// types/movie.ts
 export interface Movie {
   id: number;
   title: string;
@@ -27,6 +26,26 @@ export interface Movie {
 }
 
 export interface MovieCollection {
+  id: string;
   title: string;
-  movies: Movie[];
+  apiParams: Record<string, string>;
+  type: 'genre' | 'popular' | 'new' | 'international';
 }
+
+export interface MoviesResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export interface FetchMoviesOptions {
+  imageType?: 'poster' | 'backdrop'; // Default can be set in the function
+  limit?: number; // How many movies to return
+}
+
+export interface FetchedCollection {
+  movies: Movie[];
+  imageType: 'poster' | 'backdrop';
+}
+
