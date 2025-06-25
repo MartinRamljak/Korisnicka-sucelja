@@ -1,5 +1,5 @@
 //Templates for fetching specific collection
-import { MovieCollection, Movie } from "../types/types";
+import { MovieCollection } from "../types/types";
 import { getMovieGenres } from "./genres";
 
 export const BASE_PARAMS = {
@@ -42,6 +42,7 @@ const COLLECTION_TEMPLATES = {
         },
         type: 'international' as const
     })
+    //Add in more as needed
 };
 
 export async function generateAllCollection(): Promise<MovieCollection[]> {
@@ -62,6 +63,7 @@ export function generateCollection(
   type: 'genre',
   genre: { id: number; name: string }
 ): MovieCollection;
+
 export function generateCollection(
   type: 'popular' | 'genre' | 'international',
   genre?: { id: number; name: string }
@@ -75,4 +77,29 @@ export function generateCollection(
     case 'international':
       return COLLECTION_TEMPLATES.international();
   }
+}
+
+//Random collection generator
+export async function generateRandomCollections(count: number): Promise<MovieCollection[]> {
+  const { genres } = await getMovieGenres();
+  const collections: MovieCollection[] = [];
+  const usedIds = new Set<string>();
+
+  const allPossibleCollections = await generateAllCollection();
+  
+  const shuffledCollections = [...allPossibleCollections].sort(
+    () => 0.5 - Math.random()
+  );
+
+  // Take the first N unique collections
+  for (const collection of shuffledCollections) {
+    if (collections.length >= count) break;
+    if (!usedIds.has(collection.id)) {
+      usedIds.add(collection.id);
+      collections.push(collection);
+    }
+  }
+
+  return collections;
+  
 }

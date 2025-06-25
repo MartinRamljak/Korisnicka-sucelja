@@ -32,13 +32,6 @@ export interface MovieCollection {
   type: 'genre' | 'popular' | 'new' | 'international';
 }
 
-export interface MoviesResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
-
 export interface FetchMoviesOptions {
   imageType?: 'poster' | 'backdrop'; // Default can be set in the function
   limit?: number; // How many movies to return

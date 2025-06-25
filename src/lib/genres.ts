@@ -1,5 +1,5 @@
 //Fetches list of all the genres
-import { Genre, GenresResponse } from "../types/types";
+import { GenresResponse } from "../types/types";
 import { fetchTMDB } from './tmdb';
 
 // Export specific API functions

@@ -1,6 +1,6 @@
 // components/PopularMovies.tsx
 import { generateCollection } from '@/src/lib/collections';
-import { fetchMoviesForCollections } from '@/src/lib/fetchMoviesForCollections';
+import { fetchMoviesForCollections } from '@/src/lib/fetchMoviesForCollection';
 
 export default async function PopularMovies() {
   const collection = generateCollection('popular');

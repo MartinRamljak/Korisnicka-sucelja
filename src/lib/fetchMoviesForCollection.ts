@@ -7,7 +7,7 @@ const DEFAULT_OPTIONS: Required<FetchMoviesOptions> = {
     limit: 8
 };
 
-export async function fetchMoviesForCollections(
+export async function fetchMoviesForCollection(
     collection: MovieCollection,
     options: FetchMoviesOptions = {}
 ): Promise <FetchedCollection> {
