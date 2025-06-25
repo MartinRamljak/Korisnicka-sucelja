@@ -31,17 +31,6 @@ const COLLECTION_TEMPLATES = {
         type: 'popular' as const
     }),
 
-    international: () => ({
-        id: 'international',
-        title: 'Non-English Movies',
-        apiParams: {
-            ...BASE_PARAMS,
-            with_original_language: '!en',
-            sort_by: 'popularity.desc'
-            
-        },
-        type: 'international' as const
-    })
     //Add in more as needed
 };
 
@@ -51,13 +40,12 @@ export async function generateAllCollection(): Promise<MovieCollection[]> {
     return [
         ...genres.map(COLLECTION_TEMPLATES.genre),
         COLLECTION_TEMPLATES.popular(),
-        COLLECTION_TEMPLATES.international()
     ];
 }
 
 // Generate SPECIFIC collection by type
 export function generateCollection(
-  type: 'popular' | 'international'
+  type: 'popular'
 ): MovieCollection;
 export function generateCollection(
   type: 'genre',
@@ -65,7 +53,7 @@ export function generateCollection(
 ): MovieCollection;
 
 export function generateCollection(
-  type: 'popular' | 'genre' | 'international',
+  type: 'popular' | 'genre',
   genre?: { id: number; name: string }
 ): MovieCollection {
   switch (type) {
@@ -74,8 +62,6 @@ export function generateCollection(
       return COLLECTION_TEMPLATES.genre(genre);
     case 'popular':
       return COLLECTION_TEMPLATES.popular();
-    case 'international':
-      return COLLECTION_TEMPLATES.international();
   }
 }
 
