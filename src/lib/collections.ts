@@ -34,6 +34,7 @@ const COLLECTION_TEMPLATES = {
     //Add in more as needed
 };
 
+
 export async function generateAllCollection(): Promise<MovieCollection[]> {
     const { genres } = await getMovieGenres();
 
@@ -67,7 +68,6 @@ export function generateCollection(
 
 //Random collection generator
 export async function generateRandomCollections(count: number): Promise<MovieCollection[]> {
-  const { genres } = await getMovieGenres();
   const collections: MovieCollection[] = [];
   const usedIds = new Set<string>();
 

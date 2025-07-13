@@ -3,7 +3,8 @@ import Header from "../../components/header/header";
 import type { Metadata } from "next";
 import { Footer } from "@/src/components/footer/footer";
 import Search from "@/src/components/search/search";
-import { ScrollableCollections } from "@/src/components/collections/collectionsScrollable";
+import FetchCollections from "@/src/components/collections/collectionsScrollableServer";
+import Title from "@/src/components/title/title";
 
 export const metadata: Metadata = {
   title: "Collections",
@@ -16,7 +17,7 @@ export default function CollectionsPage() {
       <Navigation />
       <h1 className="text-6xl font-extrabold tracking-tight mt-6">Collections</h1>
       <Search />
-      <ScrollableCollections />
+      <FetchCollections />
       <Footer />
     </main>
   );

@@ -35,3 +35,12 @@ input::placeholder {
   font-size: clamp(1rem, 2.5vw, 1.5rem);
   font-weight: 400;
 }
+
+/* global.css */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

@@ -30,6 +30,7 @@ export interface MovieCollection {
   title: string;
   apiParams: Record<string, string>;
   type: 'genre' | 'popular' | 'new' | 'international';
+  movies?: Movie[];
 }
 
 export interface FetchMoviesOptions {

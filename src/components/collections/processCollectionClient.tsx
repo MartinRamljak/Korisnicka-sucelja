@@ -18,11 +18,11 @@ export default function MovieImageDisplay({
 }: MovieImageDisplayProps) {
   return (
     <div
-      className="flex flex-col justify-center gap-4 w-full max-w-[1200px] mx-auto"
-      style={{ transform: "scale(0.8)" }}
+      className="flex flex-col gap-4 w-full mx-auto"
+      style={{ transform: "scale(0.92)" }}
     >
       <div
-        className="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh]"
+        className="relative w-full sm:aspect-[5/2] md:aspect-[7/2] lg:aspect-[5/8]"
         style={
           layout === "overlap"
             ? {
@@ -35,7 +35,6 @@ export default function MovieImageDisplay({
       >
         {movies.map((movie, idx) => {
           const zIndex = 30 - idx * 10;
-
           if (imageType === "poster") {
             return movie.poster_path ? (
               <Image
@@ -69,38 +68,7 @@ export default function MovieImageDisplay({
                 <span className="text-gray-500">No poster</span>
               </div>
             );
-          } else {
-            return (
-              <div
-                key={movie.id}
-                className={`relative ${
-                  layout === "overlap"
-                    ? `z-[${zIndex}] ${
-                        idx === 0
-                          ? "col-span-13 row-span-13"
-                          : idx === 1
-                          ? "col-start-2 col-span-13 row-start-2 row-span-13"
-                          : "col-start-3 col-span-13 row-start-3 row-span-13"
-                      }`
-                    : "col-span-1"
-                }`}
-              >
-                {movie.backdrop_path ? (
-                  <Image
-                    src={`https://image.tmdb.org/t/p/w780${movie.backdrop_path}`}
-                    alt={movie.title}
-                    fill
-                    className="object-cover aspect-video"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                ) : (
-                  <div className="bg-gray-200 w-full h-full flex items-center justify-center aspect-video">
-                    <span className="text-gray-500">No backdrop</span>
-                  </div>
-                )}
-              </div>
-            );
-          }
+          } 
         })}
 
         
