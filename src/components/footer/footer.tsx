@@ -42,7 +42,7 @@ type Page = {
 export function Footer(){
     return (
         <footer className="flex flex-col justify-center items-center h-20 text-white mt-10">
-            <button className="bg-primary md:text-2xl py-3 px-5 rounded-2xl mb-4 hover:bg-secondary duration-300">Join for more access!</button>
+            <button className="bg-primary md:text-2xl py-3 px-5 rounded-2xl mb-4 hover:bg-secondary duration-300 mt-10">Join for more access!</button>
             <div className="flex flex-col lg:flex-row justify-between items-center bg-primary py-2 px-6 w-screen">
                 <h2 className="text-black text-l md:text-2xl">Connect on social media</h2>
                 <div className="flex space-x-10 pr-5">
