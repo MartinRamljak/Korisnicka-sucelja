@@ -7,28 +7,25 @@ interface MovieImageDisplayProps {
   movies: Movie[];
   collectionTitle: string;
   imageType: "poster" | "backdrop";
-  layout: "overlap" | "grid";
 }
 
 export default function MovieImageDisplayOverlap({
   movies,
   collectionTitle,
   imageType,
-  layout,
 }: MovieImageDisplayProps) {
   return (
     <div className="flex flex-col gap-4 w-full mx-auto px-2 sm:px-4">
       <div
         className="relative w-full sm:aspect-[5/2] md:aspect-[7/2] lg:aspect-[5/8]"
-        style={
-          layout === "overlap"
-            ? {
+        style={{
+          
                 display: "grid",
                 gridTemplateColumns: "repeat(15, minmax(0, 1fr))",
                 gridTemplateRows: "repeat(15, minmax(0, 1fr))",
-              }
-            : undefined
-        }
+              }}
+            
+        
       >
         {movies.map((movie, idx) => {
           const zIndex = 30 - idx * 10;

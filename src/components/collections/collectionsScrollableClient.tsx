@@ -56,7 +56,6 @@ export default function ScrollableCollections({ collections, mode }: ScrollableC
                       movies={collection.movies!}
                       collectionTitle={collection.title}
                       imageType="poster"
-                      layout="overlap"
                     />
                   </div>
                 ))}
@@ -74,7 +73,6 @@ export default function ScrollableCollections({ collections, mode }: ScrollableC
                       movies={collection.movies!}
                       collectionTitle={collection.title}
                       imageType="poster"
-                      layout="grid"
                     />
                   </div>
                 ))}
