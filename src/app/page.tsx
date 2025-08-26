@@ -20,7 +20,7 @@ export default function Home() {
       <Scrollable contentType="upcoming" title="Upcoming Releases"/>
       <Scrollable contentType="reel" title="New in Theatres"/>
       <Scrollable contentType="reel" title="Top this week"/>
-      <Title prompt="Collections" />
+      <Title prompt="Collections" href="/collections"/>
       <FetchCollections mode="random"/>
       <Footer />
     </main>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Movie } from "@/src/types/types";
 import { useRef } from "react";
 import { useHorizontalScroll } from "@/src/hooks/horizontalScroll";
+import Link from "next/link";
 
 interface MovieImageDisplayProps {
   movies: Movie[];
@@ -48,8 +49,9 @@ export default function MovieImageDisplayGrid({
           style={{ scrollSnapType: "x mandatory" }}
         >
           {movies.map((movie) => (
-            <div
+            <Link
               key={movie.id}
+              href={`/movie/${movie.id}`}
               className="flex-shrink-0 w-[120px] sm:w-[150px] md:w-[180px] lg:w-[220px] snap-start flex flex-col cursor-pointer hover:bg-gray-700/20"
             >
               {/* Movie poster */}
@@ -96,7 +98,7 @@ export default function MovieImageDisplayGrid({
                     </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
