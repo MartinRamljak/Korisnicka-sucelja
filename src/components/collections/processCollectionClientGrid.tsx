@@ -10,14 +10,12 @@ interface MovieImageDisplayProps {
   movies: Movie[];
   collectionTitle: string;
   imageType: "poster" | "backdrop";
-  layout: "overlap" | "grid";
 }
 
 export default function MovieImageDisplayGrid({
   movies,
   collectionTitle,
   imageType,
-  layout,
 }: MovieImageDisplayProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { showLeftArrow, showRightArrow, handleScroll } = useHorizontalScroll(scrollRef);
