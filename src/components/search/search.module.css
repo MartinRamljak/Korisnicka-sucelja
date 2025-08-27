@@ -1,7 +1,7 @@
 .search-bar-container {
     display: flex;
     flex-direction: row;
-    width: 40%;
+    width: 100%;
     padding: 20px 0 0 0;
     gap: 10px;
     height: clamp(50px, 7vw, 70px);
@@ -9,6 +9,7 @@
     margin-right: auto;
     justify-content: center;
     align-content: center;
+    position: relative; /* for dropdown positioning */
 }
 
 .search-bar {
@@ -19,6 +20,7 @@
     border-width: 2.5px;
     border-color: var(--dark-primary);
     font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: var(--dark-primary);
 }
 
 .search-filters {
@@ -31,8 +33,61 @@
     float: right;
 }
 
+/* Dropdown styles */
+.dropdown {
+    position: absolute;
+    top: 100%; /* below search bar */
+    left: 0;
+    width: 90%; /* same as input width */
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: var(--light-primary);
+    border: 1px solid var(--dark-primary);
+    border-radius: 10px;
+    margin-top: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    color: var(--dark-primary);
+    display: flex;
+}
+
+.dropdown-item:hover {
+    background-color: var(--dark-primary);
+    color: white;
+}
+
+.dropdown-poster {
+  width: 40px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+
+.dropdown-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-title {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.dropdown-year {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
 @media screen and (max-width: 768px) {
     .search-bar-container {
         padding: 20px 5px 0 5px;
     }
-  }
+}
