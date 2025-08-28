@@ -19,6 +19,7 @@
     border-radius: 10px;
     border-width: 2.5px;
     border-color: var(--dark-primary);
+    border-style: solid;
     font-size: clamp(1rem, 2.5vw, 1.5rem);
     color: var(--dark-primary);
 }

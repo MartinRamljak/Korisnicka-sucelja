@@ -3,14 +3,25 @@
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import styles from "./search.module.css";
 import { searchMovies } from "@/src/lib/search";
-import type { Movie } from "@/src/types/types";
+import type { Movie, Genre, MovieCollection } from "@/src/types/types";
 import Link from "next/link";
+import FilterModal from "./filterModal";
+import ScrollableCollections from "@/src/components/collections/collectionsScrollableClient";
+import { generateCollectionsByGenres } from "@/src/lib/collections";
+import { fetchMoviesForCollection } from "@/src/lib/fetchMoviesForCollection";
+import { useRouter } from "next/navigation";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
+  const [filteredCollections, setFilteredCollections] = useState<MovieCollection[]>([]);
+
+  const router = useRouter();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -63,6 +74,17 @@ export default function Search() {
     }
   };
 
+  const handleApplyGenres = (genres: Genre[]) => {
+    setSelectedGenres(genres);
+    setIsFilterOpen(false);
+
+    if (!genres || genres.length === 0) return; // nothing selected, do nothing
+
+    // REDIRECT TO /collections WITH QUERY PARAMS
+    const genreIds = genres.map((g) => g.id).join(",");
+    router.push(`/collections?genres=${genreIds}`);
+  };
+
   return (
     <div>
       <div className={styles["search-bar-container"]} ref={containerRef}>
@@ -85,12 +107,8 @@ export default function Search() {
         <button
           type="button"
           className={styles["search-filters"]}
-          onClick={() => {
-            if (results.length > 0) {
-              setQuery(results[0].title);
-              setResults([]);
-            }
-          }}
+          
+          onClick={() => setIsFilterOpen(true)}
           style={{
             backgroundImage: "url('/images/filter_icon.png')",
             backgroundSize: "auto clamp(20px, 3vw, 30px)",
@@ -140,6 +158,19 @@ export default function Search() {
         {loading && <p>Loading...</p>}
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>
+
+       {/* Filter modal */}
+      <FilterModal
+        open={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        onApply={handleApplyGenres}
+      />
+
+      {/*{filteredCollections.length > 0 && (
+        <div className="mt-6 w-full">
+          <ScrollableCollections collections={filteredCollections} mode="all" />
+        </div>
+      )}*/}
     </div>
   );
 }

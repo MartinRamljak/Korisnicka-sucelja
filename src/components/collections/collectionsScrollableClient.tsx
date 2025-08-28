@@ -9,7 +9,7 @@ import { useHorizontalScroll } from "@/src/hooks/horizontalScroll";
 
 type ScrollableCollectionsProps = {
   collections: MovieCollection[];
-  mode: "all" | "random";
+  mode: "all" | "random" | "filtered";
 };
 
 export default function ScrollableCollections({ collections, mode }: ScrollableCollectionsProps) {

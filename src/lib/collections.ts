@@ -1,4 +1,4 @@
-//Templates for fetching specific collection
+// Templates for fetching specific collection
 import { MovieCollection } from "../types/types";
 import { getMovieGenres } from "./genres";
 
@@ -9,7 +9,7 @@ export const BASE_PARAMS = {
 } as const;
 
 const COLLECTION_TEMPLATES = {
-    genre: ( genre: { id: number; name: string}) => ({
+    genre: (genre: { id: number; name: string }) => ({
         id: `genre-${genre.id}`,
         title: `${genre.name} Movies`,
         apiParams: {
@@ -30,11 +30,10 @@ const COLLECTION_TEMPLATES = {
         },
         type: 'popular' as const
     }),
-
     //Add in more as needed
 };
 
-
+// Generate ALL collections (default)
 export async function generateAllCollection(): Promise<MovieCollection[]> {
     const { genres } = await getMovieGenres();
 
@@ -66,7 +65,7 @@ export function generateCollection(
   }
 }
 
-//Random collection generator
+// Random collection generator
 export async function generateRandomCollections(count: number): Promise<MovieCollection[]> {
   const collections: MovieCollection[] = [];
   const usedIds = new Set<string>();
@@ -87,5 +86,18 @@ export async function generateRandomCollections(count: number): Promise<MovieCol
   }
 
   return collections;
-  
+}
+
+export async function generateCollectionsByGenres(
+  selectedGenres: { id: number; name: string }[],
+  includePopular: boolean = false
+): Promise<MovieCollection[]> {
+  if (!selectedGenres || selectedGenres.length === 0) {
+    // fallback: return all collections or empty array
+    return includePopular ? await generateAllCollection() : [];
+  }
+
+  const genreCollections = selectedGenres.map(COLLECTION_TEMPLATES.genre);
+
+  return genreCollections;
 }

@@ -1,32 +1,46 @@
-import { generateAllCollection, generateRandomCollections } from "@/src/lib/collections";
+import { generateAllCollection, generateRandomCollections, generateCollectionsByGenres } from "@/src/lib/collections";
 import ScrollableCollections from "./collectionsScrollableClient";
 import { fetchMoviesForCollection } from "@/src/lib/fetchMoviesForCollection";
+import { getMovieGenres } from "@/src/lib/genres";
 
 type FetchCollectionsProps = {
-  mode: "all" | "random";
+  mode?: "all" | "random" | "filtered";
+  genreIds?: number[];
 };
 
-export default async function FetchCollections({ mode }: FetchCollectionsProps) {
-    let collections;
-    
-    if(mode === "random"){
-        collections = await generateRandomCollections(9);
-    }
-    else{
-        collections = await generateAllCollection();
-    }
+export default async function FetchCollections({ mode = "all", genreIds }: FetchCollectionsProps) {
+  let collections;
 
-    const limit = mode === "random" ? 3 : 21;
+  // ✅ If genres are provided, generate collections filtered by genres
+  if (genreIds && genreIds.length > 0) {
+    // Fetch all genres so we can map IDs to names
+    const { genres: allGenres } = await getMovieGenres();
 
-    const collectionsWithMovies = await Promise.all(
-        collections.map(async (collection) => {
-        const { movies } = await fetchMoviesForCollection(collection, {
-            imageType: "poster",
-            limit,
-        });
-        return { ...collection, movies }; // Merge movies into collection
-        })
-    );
+    const selectedGenres = allGenres
+      .filter((g) => genreIds.includes(g.id))
+      .map((g) => ({ id: g.id, name: g.name }));
 
-    return <ScrollableCollections collections = {collectionsWithMovies}  mode={mode} />
+    collections = await generateCollectionsByGenres(selectedGenres);
+  } 
+  else if (mode === "random") {
+    collections = await generateRandomCollections(9);
+  } 
+  else {
+    collections = await generateAllCollection();
+  }
+
+  const limit = mode === "random" ? 3 : 21;
+
+  // Fetch movies for each collection
+  const collectionsWithMovies = await Promise.all(
+    collections.map(async (collection) => {
+      const { movies } = await fetchMoviesForCollection(collection, {
+        imageType: "poster",
+        limit,
+      });
+      return { ...collection, movies }; // Merge movies into collection
+    })
+  );
+
+  return <ScrollableCollections collections={collectionsWithMovies} mode={mode} />;
 }
