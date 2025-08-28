@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import styles from "./search.module.css";
 import { searchMovies } from "@/src/lib/search";
-import type { Movie, Genre, MovieCollection } from "@/src/types/types";
+import type { Movie, Genre } from "@/src/types/types";
 import Link from "next/link";
 import FilterModal from "./filterModal";
 import { useRouter } from "next/navigation";
