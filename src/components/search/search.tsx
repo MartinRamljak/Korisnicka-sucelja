@@ -6,9 +6,6 @@ import { searchMovies } from "@/src/lib/search";
 import type { Movie, Genre, MovieCollection } from "@/src/types/types";
 import Link from "next/link";
 import FilterModal from "./filterModal";
-import ScrollableCollections from "@/src/components/collections/collectionsScrollableClient";
-import { generateCollectionsByGenres } from "@/src/lib/collections";
-import { fetchMoviesForCollection } from "@/src/lib/fetchMoviesForCollection";
 import { useRouter } from "next/navigation";
 
 export default function Search() {
@@ -18,8 +15,6 @@ export default function Search() {
   const [error, setError] = useState<string | null>(null);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedGenres, setSelectedGenres] = useState<Genre[]>([]);
-  const [filteredCollections, setFilteredCollections] = useState<MovieCollection[]>([]);
 
   const router = useRouter();
 
@@ -75,7 +70,6 @@ export default function Search() {
   };
 
   const handleApplyGenres = (genres: Genre[]) => {
-    setSelectedGenres(genres);
     setIsFilterOpen(false);
 
     if (!genres || genres.length === 0) return; // nothing selected, do nothing
