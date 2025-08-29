@@ -1,7 +1,7 @@
 "use client";
 
 import type { Movie } from "@/src/types/types";
-import { fetchUpcomingMovies } from "@/src/lib/fetchUpcomingMovies";
+import { fetchUpcomingMovies } from "@/src/lib/fetchSpecialCollections";
 import { useState, useEffect, useRef } from "react";
 import { useHorizontalScroll } from "@/src/hooks/horizontalScroll";
 import Image from "next/image";

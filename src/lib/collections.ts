@@ -41,6 +41,25 @@ const COLLECTION_TEMPLATES = {
       },
       type: 'upcoming' as const,
     }),
+    new: () => ({
+      id: 'new',
+      title: 'New Movies',
+      apiParams: {
+        ...BASE_PARAMS,
+        sort_by: 'primary_release_date.desc', // most recent first
+        'primary_release_date.lte': new Date().toISOString().split('T')[0],
+      },
+      type: 'new' as const,
+    }),
+    top: () => ({
+      id: 'top',
+      title: 'Top This Week',
+      apiParams: {
+        ...BASE_PARAMS,
+        sort_by: 'popularity.desc'
+      },
+      type: 'top' as const,
+    }),
     //Add in more as needed
 };
 
@@ -52,6 +71,8 @@ export async function generateAllCollection(): Promise<MovieCollection[]> {
         ...genres.map(COLLECTION_TEMPLATES.genre),
         COLLECTION_TEMPLATES.popular(),
         COLLECTION_TEMPLATES.upcoming(),
+        COLLECTION_TEMPLATES.top(),
+        COLLECTION_TEMPLATES.new(),
     ];
 }
 
@@ -65,7 +86,7 @@ export function generateCollection(
 ): MovieCollection;
 
 export function generateCollection(
-  type: 'popular' | 'genre' | 'upcoming',
+  type: 'popular' | 'genre' | 'upcoming' | 'new' | 'top',
   genre?: { id: number; name: string }
 ): MovieCollection {
   switch (type) {
@@ -76,6 +97,10 @@ export function generateCollection(
       return COLLECTION_TEMPLATES.popular();
     case 'upcoming':
       return COLLECTION_TEMPLATES.upcoming();
+    case 'new':
+      return COLLECTION_TEMPLATES.new();
+    case 'top':
+      return COLLECTION_TEMPLATES.top();
   }
 }
 

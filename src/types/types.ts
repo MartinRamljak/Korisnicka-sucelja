@@ -29,7 +29,7 @@ export interface MovieCollection {
   id: string;
   title: string;
   apiParams: Record<string, string>;
-  type: 'genre' | 'popular' | 'new' | 'international' | 'upcoming';
+  type: 'genre' | 'popular' | 'new' | 'top' | 'upcoming';
   movies?: Movie[];
 }
 
