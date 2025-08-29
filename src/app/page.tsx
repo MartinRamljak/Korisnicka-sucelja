@@ -2,7 +2,6 @@ import { Navigation } from "../components/navigation/navigation";
 import Header from "../components/header/header";
 import Search from "../components/search/search";
 import type { Metadata } from "next";
-import Scrollable from "../components/scrollable/scrollable";
 import { Footer } from "../components/footer/footer";
 import FetchCollections from "../components/collections/collectionsScrollableServer";
 import Title from "@/src/components/title/title";
