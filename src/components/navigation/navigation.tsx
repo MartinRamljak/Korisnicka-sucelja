@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./navigation.module.css"
 import { usePathname } from "next/navigation";
+import { supabase } from '../../lib/supabase'
+import type { User } from '@supabase/supabase-js'
 
 type Page = {
     title: string;
@@ -26,6 +28,10 @@ type Page = {
     },
     {
       title: "Login/Signup",
+      path: "/login_signup",
+    },
+    {
+      title: "User Profile",
       path: "/user_profile",
     },
   ];
@@ -89,6 +95,32 @@ type Page = {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const closeMenu = () => setIsMenuOpen(false);
+    const [user, setUser] = useState<User | null>(null)
+    const [authChecked, setAuthChecked] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+
+    useEffect(() => {
+      const getUser = async () => {
+        setLoading(true)
+        const { data } = await supabase.auth.getUser()
+        if (data?.user) {
+          setUser(data.user)
+        }
+        setAuthChecked(true)
+        setLoading(false)
+      }
+
+      getUser()
+    }, [])
+    
+    if (!authChecked) return null
+
+    if (loading) {
+      return <p>Loading...</p>;
+    }
+
+    const filteredPages = user ? pages.filter(page => page.title !== 'Login/Signup') : pages.filter(page => page.title !== 'User Profile')
     return (
       <nav className={`sticky top-0 z-10 ${styles.navbg}`}>
         <div className="container flex justify-between">
@@ -99,14 +131,14 @@ type Page = {
             `flex sm:hidden flex-col w-full absolute top-full left-0 items-center bg-primary py-2 px-3 space-y-2 text-sm border-b border-secondary
             ${!isMenuOpen ? 'hidden' : ''}`
           }>
-            {pages.map((page, index) =>
+            {filteredPages.map((page, index) =>
             processPage(page, index, pathname, closeMenu)
           )}
           </ul>
 
           {/* Hidden on mobile */}
           <ul className={`hidden sm:flex ${styles.navlist}`}>
-            {pages.map((page, index) => processPage(page, index, pathname))}
+            {filteredPages.map((page, index) => processPage(page, index, pathname))}
           </ul>
           
         </div>
