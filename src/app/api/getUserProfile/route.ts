@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest} from 'next';
 import { db } from '../../../lib/drizzle';
 import { eq } from 'drizzle-orm';
 import { profiles } from '../../../db/schema';

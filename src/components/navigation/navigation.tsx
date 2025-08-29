@@ -116,6 +116,10 @@ type Page = {
     
     if (!authChecked) return null
 
+    if (loading) {
+      return <p>Loading...</p>;
+    }
+
     const filteredPages = user ? pages.filter(page => page.title !== 'Login/Signup') : pages.filter(page => page.title !== 'User Profile')
     return (
       <nav className={`sticky top-0 z-10 ${styles.navbg}`}>
