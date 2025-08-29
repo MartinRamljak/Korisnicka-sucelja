@@ -1,9 +1,9 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest} from 'next/server';
 import { db } from '../../../lib/drizzle';
 import { eq } from 'drizzle-orm';
 import { profiles } from '../../../db/schema';
 
-export async function GET(req: NextApiRequest) {
+export async function GET(req: NextRequest) {
   
   const urlString = req.url ?? '';
   const url = new URL(urlString, `http://${req.headers.host}`);

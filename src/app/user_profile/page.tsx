@@ -4,14 +4,15 @@ import { Navigation } from "../../components/navigation/navigation";
 import Header from "../../components/header/header";
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { supabase } from '../../lib/supabase'
+import { supabase, UserProfile } from '../../lib/supabase'
+import { User } from '@supabase/supabase-js';
 
 export default function UserProfilePage() {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [username, setUsername] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -60,12 +61,16 @@ export default function UserProfilePage() {
     }
   }, [user]);
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center">
       <Header />
       <Navigation />
       <h1 className="text-6xl font-extrabold tracking-tight">User profile</h1>
-      {user ? (
+      {profile ? (
         <>
         <p style={{marginTop: 16, fontSize: 32}}>
           <span style={{display: "inline"}}>Logged in as: </span>
@@ -74,7 +79,7 @@ export default function UserProfilePage() {
         <button className="button-logout" onClick={handleLogout}>Log Out</button>
         </>
         ) : (
-          <p>Please wait while the user profile is loading</p>
+          <p></p>
         )
       }
         
