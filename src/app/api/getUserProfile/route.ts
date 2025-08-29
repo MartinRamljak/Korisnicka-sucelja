@@ -5,8 +5,7 @@ import { profiles } from '../../../db/schema';
 
 export async function GET(req: NextRequest) {
   
-  const urlString = req.url ?? '';
-  const url = new URL(urlString, `http://${req.headers.host}`);
+  const url = req.nextUrl ?? '';
   
   const userId = url.searchParams.get('userId');
 
@@ -40,11 +39,19 @@ export async function GET(req: NextRequest) {
     }
 
     return new Response(JSON.stringify(userProfile[0]), { status: 200 });
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'Server error' }),
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error fetching user profile:', error);
+      return new Response(
+        JSON.stringify({ error: error.message || 'Server error' }),
+        { status: 500 }
+      );
+    } else {
+      console.error('Unknown error:', error);
+      return new Response(
+        JSON.stringify({ error: 'An unknown error occurred' }),
+        { status: 500 }
+      );
+    }
   }
 }
