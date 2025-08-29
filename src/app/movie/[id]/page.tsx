@@ -4,9 +4,20 @@ import { fetchMovieById } from "@/src/lib/fetchMovieById";
 import { Navigation } from "@/src/components/navigation/navigation";
 import Header from "@/src/components/header/header";
 import { Clapperboard } from "lucide-react";
+import type { Metadata } from "next";
 
+type Props = { params: { id: string } };
 
-export default async function MoviePage({ params }: { params: { id: string } }) {
+// Dynamic metadata for browser tab
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const movie: Movie = await fetchMovieById(params.id);
+  return {
+    title: movie.title, // tab title = movie title
+    description: movie.overview, // optional meta description
+  };
+}
+
+export default async function MoviePage({ params }: Props) {
   const { id } = params;
   const movie: Movie = await fetchMovieById(id);
 
@@ -18,6 +29,7 @@ export default async function MoviePage({ params }: { params: { id: string } }) 
       <div className="max-w-5xl mx-auto p-4 sm:p-6">
         {/* Movie Card */}
         <div className="relative flex flex-col md:flex-row items-center gap-6 bg-neutral-900 rounded-2xl shadow-lg p-4 sm:p-6">
+          
           {/* Backdrop */}
           {movie.backdrop_path && (
             <div className="absolute inset-0 -z-10">
@@ -49,6 +61,7 @@ export default async function MoviePage({ params }: { params: { id: string } }) 
               <Clapperboard className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               <h1 className="text-2xl sm:text-3xl font-bold">{movie.title}</h1>
             </div>
+
             <p className="text-gray-400 text-sm sm:text-base">
               Release Date: {movie.release_date}
             </p>
@@ -57,24 +70,25 @@ export default async function MoviePage({ params }: { params: { id: string } }) 
             {/* Stats */}
             <div className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-gray-300 mt-2">
               <div className="flex items-center gap-1">
-                        <Image 
-                            src="/images/star.png" 
-                            alt="Star" 
-                            width={16} 
-                            height={16} 
-                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-                        />
-                        <span className="text-xs sm:text-sm md:text-base">{movie.vote_average.toFixed(1)}</span>
-                    </div>
-                    <div className="flex items-center gap-1"> 
-                        <Image 
-                            src="/images/heart.png" 
-                            alt="Heart"
-                            width={16} 
-                            height={16} 
-                            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" /> 
-                        <span className="text-text-xs sm:text-sm md:text-base">{Math.floor(movie.popularity)}</span>
-                    </div>
+                <Image 
+                  src="/images/star.png" 
+                  alt="Star" 
+                  width={16} 
+                  height={16} 
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+                />
+                <span className="text-xs sm:text-sm md:text-base">{movie.vote_average.toFixed(1)}</span>
+              </div>
+              <div className="flex items-center gap-1"> 
+                <Image 
+                  src="/images/heart.png" 
+                  alt="Heart"
+                  width={16} 
+                  height={16} 
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" 
+                /> 
+                <span className="text-xs sm:text-sm md:text-base">{Math.floor(movie.popularity)}</span>
+              </div>
             </div>
           </div>
         </div>

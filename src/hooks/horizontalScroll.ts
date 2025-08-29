@@ -35,8 +35,12 @@ export function useHorizontalScroll(scrollRef: React.RefObject<HTMLElement>) {
     if (!container) return;
 
     const firstChild = container.firstElementChild as HTMLElement | null;
-    const cardWidth = firstChild?.clientWidth || 400;
-    const scrollAmount = cardWidth * 1.5;
+    const cardWidth = firstChild?.clientWidth || container.clientWidth;
+    const gap =
+      parseInt(window.getComputedStyle(container).gap || "0", 10) || 0;
+
+    // Scroll exactly one "card" at a time (plus gap)
+    const scrollAmount = cardWidth + gap;
 
     container.scrollBy({
       left: direction === "right" ? scrollAmount : -scrollAmount,

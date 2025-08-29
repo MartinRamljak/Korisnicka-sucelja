@@ -6,6 +6,7 @@ import Scrollable from "../components/scrollable/scrollable";
 import { Footer } from "../components/footer/footer";
 import FetchCollections from "../components/collections/collectionsScrollableServer";
 import Title from "@/src/components/title/title";
+import UpcomingMovies from "../components/upcoming/upcomingMovies";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -17,9 +18,12 @@ export default function Home() {
       <Header />
       <Navigation />
       <Search />
-      <Scrollable contentType="upcoming" title="Upcoming Releases"/>
+      <Title prompt="Upcoming Releases" href="/collections#Upcoming-Movies"/>
+      <UpcomingMovies />
+      {/*<Title prompt="New in Theatres" href="/collections"/>
       <Scrollable contentType="reel" title="New in Theatres"/>
-      <Scrollable contentType="reel" title="Top this week"/>
+      <Title prompt="Top this week" href="/collections"/>
+      <Scrollable contentType="reel" title="Top this week"/>*/}
       <Title prompt="Collections" href="/collections"/>
       <FetchCollections mode="random"/>
       <Footer />

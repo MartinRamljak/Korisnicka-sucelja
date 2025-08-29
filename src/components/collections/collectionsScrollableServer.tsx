@@ -11,9 +11,7 @@ type FetchCollectionsProps = {
 export default async function FetchCollections({ mode = "all", genreIds }: FetchCollectionsProps) {
   let collections;
 
-  // ✅ If genres are provided, generate collections filtered by genres
   if (genreIds && genreIds.length > 0) {
-    // Fetch all genres so we can map IDs to names
     const { genres: allGenres } = await getMovieGenres();
 
     const selectedGenres = allGenres

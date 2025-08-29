@@ -30,6 +30,17 @@ const COLLECTION_TEMPLATES = {
         },
         type: 'popular' as const
     }),
+
+    upcoming: () => ({
+      id: 'upcoming',
+      title: 'Upcoming Movies',
+      apiParams: {
+        ...BASE_PARAMS,
+        sort_by: 'primary_release_date.asc',
+        'primary_release_date.gte': new Date().toISOString().split('T')[0], // today or later
+      },
+      type: 'upcoming' as const,
+    }),
     //Add in more as needed
 };
 
@@ -40,6 +51,7 @@ export async function generateAllCollection(): Promise<MovieCollection[]> {
     return [
         ...genres.map(COLLECTION_TEMPLATES.genre),
         COLLECTION_TEMPLATES.popular(),
+        COLLECTION_TEMPLATES.upcoming(),
     ];
 }
 
@@ -53,7 +65,7 @@ export function generateCollection(
 ): MovieCollection;
 
 export function generateCollection(
-  type: 'popular' | 'genre',
+  type: 'popular' | 'genre' | 'upcoming',
   genre?: { id: number; name: string }
 ): MovieCollection {
   switch (type) {
@@ -62,6 +74,8 @@ export function generateCollection(
       return COLLECTION_TEMPLATES.genre(genre);
     case 'popular':
       return COLLECTION_TEMPLATES.popular();
+    case 'upcoming':
+      return COLLECTION_TEMPLATES.upcoming();
   }
 }
 

@@ -21,7 +21,8 @@ export default function MovieImageDisplayGrid({
   const { showLeftArrow, showRightArrow, handleScroll } = useHorizontalScroll(scrollRef);
 
   return (
-    <div className="flex flex-col gap-4 w-full mx-auto" style={{ transform: "scale(0.92)" }}>
+    <div className="flex flex-col gap-4 w-full mx-auto" style={{ transform: "scale(0.92)" }} 
+    id={collectionTitle.replace(/\s+/g, "-")}>
       {/* Collection title */}
       <h2
         className="mb-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold"

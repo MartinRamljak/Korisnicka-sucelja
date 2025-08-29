@@ -159,12 +159,6 @@ export default function Search() {
         onClose={() => setIsFilterOpen(false)}
         onApply={handleApplyGenres}
       />
-
-      {/*{filteredCollections.length > 0 && (
-        <div className="mt-6 w-full">
-          <ScrollableCollections collections={filteredCollections} mode="all" />
-        </div>
-      )}*/}
     </div>
   );
 }
