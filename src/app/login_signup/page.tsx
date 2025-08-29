@@ -15,6 +15,7 @@ export default function AuthPage() {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [signup, setSignup] = useState<boolean>(false)
 
   useEffect(() => {
     const getUser = async () => {
@@ -72,12 +73,16 @@ export default function AuthPage() {
     setLoading(false)
   }
 
+  const handleToggle = () => {
+    setSignup(!signup)
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center">
         <Header />
         <Navigation />
-        <div style={{ maxWidth: 400, margin: '2rem auto', fontFamily: 'sans-serif' }}>
-          <h1 className="text-6xl font-extrabold tracking-tight" style={{ marginBottom: 12}}>Login/Signup</h1>
+        <div className="flex flex-col items-center" style={{ minWidth: 250, maxWidth: 400, margin: '2rem auto', fontFamily: 'sans-serif' }}>
+          <h1 className="text-6xl font-extrabold tracking-tight text-center" style={{ marginBottom: 36 }}>{signup ? 'Sign up' : 'Log in'}</h1>
 
           {!user ? (
               <>
@@ -93,20 +98,26 @@ export default function AuthPage() {
                   value={password}
                   onChange={e => setPassword(e.target.value)}
               />
-
-              <button className="button-login-signup" onClick={handleLogin} disabled={loading} style={{ marginBottom: 12 }}>
-                  Log In
-              </button>
-              <input
+              {!signup ? (
+                <></>
+              ) : (
+                <input
                   type="username"
                   placeholder="Username"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
-              />
-              <button className="button-login-signup" onClick={handleSignUp} disabled={loading}>
-                  Sign Up
-              </button>
-
+                />
+              )}
+              {!signup ? (
+                <button className="button-login-signup" onClick={handleLogin} disabled={loading}>
+                    Log In
+                </button>
+              ) : (
+                <button className="button-login-signup" onClick={handleSignUp} disabled={loading}>
+                    Sign Up
+                </button>
+              )}
+              <button className="button-toggle-login-signup" onClick={handleToggle}>{signup ? 'log in' : 'sign up'}</button>
               {error && <p style={{ color: 'red' }}>{error}</p>}
               </>
           ) : (
