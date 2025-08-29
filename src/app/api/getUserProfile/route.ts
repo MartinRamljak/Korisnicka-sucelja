@@ -5,8 +5,7 @@ import { profiles } from '../../../db/schema';
 
 export async function GET(req: NextRequest) {
   
-  const urlString = req.url ?? '';
-  const url = new URL(urlString, `http://${req.headers.host}`);
+  const url = req.nextUrl ?? '';
   
   const userId = url.searchParams.get('userId');
 
