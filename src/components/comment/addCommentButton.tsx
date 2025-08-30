@@ -76,13 +76,9 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
             posterId: posterId || '',
         };
 
-        try {
-            await createMovieComment(newMovieComment);
-            alert("Comment added successfully!");
-            onCommentAdded(newMovieComment);
-        } catch (_) {
-            alert("Failed to add comment.");
-        }
+        await createMovieComment(newMovieComment);
+        alert("Comment added successfully!");
+        onCommentAdded(newMovieComment);
     }
     else if(discussionId)
     {
@@ -95,13 +91,9 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
             posterId: posterId || '',
         };
 
-        try {
-            await createDiscussionComment(newDiscussionComment);
-            alert("Comment added successfully!");
-            onCommentAdded(newDiscussionComment);
-        } catch (_) {
-            alert("Failed to add comment.");
-        }
+        await createDiscussionComment(newDiscussionComment);
+        alert("Comment added successfully!");
+        onCommentAdded(newDiscussionComment);
     }
 
     setComment('');
