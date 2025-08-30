@@ -14,18 +14,20 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
     const [posterId, setUserId] = useState<string | null>(null);
 
     if (movieId === null && discussionId === null)
-        return (<p>Couldn&apos;t load comments</p>)
+        return (<p>Couldn't load comments</p>)
 
+    // Fetch user data (this is always executed once)
     useEffect(() => {
         const loadUser = async () => {
-          const {
-            data: { user },
-          } = await supabase.auth.getUser();
-          setUserId(user?.id ?? null);
+            const {
+                data: { user },
+            } = await supabase.auth.getUser();
+            setUserId(user?.id ?? null);
         };
         loadUser();
-    }, []);
+    }, []); // This should only run once, so empty dependency array is correct
 
+    // Fetch movie or discussion comments based on IDs (always runs)
     useEffect(() => {
         const fetchComments = async () => {
             setLoading(true); // Start loading before fetching
@@ -42,8 +44,7 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                     const response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
                     const fetchedComments = response.items.map(item => item.fields);
 
-                    if(posterId)
-                    {
+                    if(posterId) {
                         const sortedComments = fetchedComments.sort((a, b) => {
                             if (a.posterId === posterId && b.posterId !== posterId) {
                                 return -1; // Move a to the top
@@ -52,11 +53,10 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                             }
                             return 0; // Keep the rest in the same order
                         });
-
                         setMovieComments(sortedComments);
-                    }
-                    else
+                    } else {
                         setMovieComments(fetchedComments);
+                    }
                 } else if (discussionId !== null) {
                     // Fetch discussion comments
                     const query: Record<string, unknown> = {
@@ -68,8 +68,7 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                     const response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
                     const fetchedComments = response.items.map(item => item.fields);
 
-                    if(posterId)
-                    {
+                    if(posterId) {
                         const sortedComments = fetchedComments.sort((a, b) => {
                             if (a.posterId === posterId && b.posterId !== posterId) {
                                 return -1; // Move a to the top
@@ -78,11 +77,10 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                             }
                             return 0; // Keep the rest in the same order
                         });
-
                         setDiscussionComments(sortedComments);
-                    }
-                    else
+                    } else {
                         setDiscussionComments(fetchedComments);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching comments:', error);
@@ -92,13 +90,13 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
         };
 
         fetchComments();
-    }, [movieId, discussionId, prioritizedPosterId]); 
+    }, [movieId, discussionId, posterId]); // Run whenever these dependencies change
 
     const handleNewComment = (newComment: MovieCommentFields | DiscussionCommentFields) => {
         if (movieId) {
-        setMovieComments(prevComments => [newComment as MovieCommentFields, ...prevComments]);
+            setMovieComments(prevComments => [newComment as MovieCommentFields, ...prevComments]);
         } else if (discussionId) {
-        setDiscussionComments(prevComments => [newComment as DiscussionCommentFields, ...prevComments]);
+            setDiscussionComments(prevComments => [newComment as DiscussionCommentFields, ...prevComments]);
         }
     };
 
@@ -110,23 +108,22 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
         <div className={styles['comments-container']}>
             <AddComment movieId={movieId} discussionId={discussionId} onCommentAdded={handleNewComment}/>
             {movieId ? (
-                    movieComments.map((comment) => (
-                        <div key={comment.commentId} className={styles['comment']}>
-                            <p>{comment.commentText}</p>
-                            <p className={styles['username']}>~ {comment.posterUsername}</p>
-                        </div>
-                    ))
-                ) : (
-                    discussionComments.map((comment) => (
-                        <div key={comment.commentId} className={styles['comment']}>
-                            <p>{comment.commentText}</p>
-                            <p className={styles['username']}>~ {comment.posterUsername}</p>
-                        </div>
-                    ))
-                )
-            }
+                movieComments.map((comment) => (
+                    <div key={comment.commentId} className={styles['comment']}>
+                        <p>{comment.commentText}</p>
+                        <p className={styles['username']}>~ {comment.posterUsername}</p>
+                    </div>
+                ))
+            ) : (
+                discussionComments.map((comment) => (
+                    <div key={comment.commentId} className={styles['comment']}>
+                        <p>{comment.commentText}</p>
+                        <p className={styles['username']}>~ {comment.posterUsername}</p>
+                    </div>
+                ))
+            )}
         </div>
     );
 };
 
-export default Comments
+export default Comments;
