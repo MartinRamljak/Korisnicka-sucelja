@@ -13,7 +13,7 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
     const [loading, setLoading] = useState<boolean>(true);
     const [posterId, setUserId] = useState<string | null>(null);
 
-    // Fetch user data (this is always executed once)
+    // Fetch user data
     useEffect(() => {
         const loadUser = async () => {
             const {
@@ -22,9 +22,9 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
             setUserId(user?.id ?? null);
         };
         loadUser();
-    }, []); // This should only run once, so empty dependency array is correct
+    }, []);
 
-    // Fetch movie or discussion comments based on IDs (always runs)
+    // Fetch movie or discussion comments based on ID
     useEffect(() => {
         const fetchComments = async () => {
             setLoading(true); // Start loading before fetching
@@ -41,15 +41,19 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                     const response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
                     const fetchedComments = response.items.map(item => item.fields);
 
-                    const sortedComments = fetchedComments.sort((a, b) => {
-                        if (a.posterId === posterId && b.posterId !== posterId) {
-                            return -1; // Move a to the top
-                        } else if (b.posterId === posterId && a.posterId !== posterId) {
-                            return 1; // Move b to the top
-                        }
-                        return 0; // Keep the rest in the same order
-                    });
-                    setMovieComments(sortedComments);
+                    if(posterId) {
+                        const sortedComments = fetchedComments.sort((a, b) => {
+                            if (a.posterId === posterId && b.posterId !== posterId) {
+                                return -1; // Move a to the top
+                            } else if (b.posterId === posterId && a.posterId !== posterId) {
+                                return 1; // Move b to the top
+                            }
+                            return 0; // Keep the rest in the same order
+                        });
+                        setMovieComments(sortedComments);
+                    } else {
+                        setMovieComments(fetchedComments);
+                    }
                 } else if (discussionId !== null) {
                     // Fetch discussion comments
                     const query: Record<string, unknown> = {
@@ -61,15 +65,19 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                     const response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
                     const fetchedComments = response.items.map(item => item.fields);
 
-                    const sortedComments = fetchedComments.sort((a, b) => {
-                        if (a.posterId === posterId && b.posterId !== posterId) {
-                            return -1; // Move a to the top
-                        } else if (b.posterId === posterId && a.posterId !== posterId) {
-                            return 1; // Move b to the top
-                        }
-                        return 0; // Keep the rest in the same order
-                    });
-                    setDiscussionComments(sortedComments);
+                    if(posterId) {
+                        const sortedComments = fetchedComments.sort((a, b) => {
+                            if (a.posterId === posterId && b.posterId !== posterId) {
+                                return -1; // Move a to the top
+                            } else if (b.posterId === posterId && a.posterId !== posterId) {
+                                return 1; // Move b to the top
+                            }
+                            return 0; // Keep the rest in the same order
+                        });
+                        setDiscussionComments(sortedComments);
+                    } else {
+                        setDiscussionComments(fetchedComments);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching comments:', error);
@@ -90,7 +98,7 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
     };
     
     if (movieId === null && discussionId === null)
-        return (<p>Couldn't load comments</p>)
+        return (<p>Couldn&apos;t load comments</p>)
 
     if (loading) {
         return <div>Loading comments...</div>;
