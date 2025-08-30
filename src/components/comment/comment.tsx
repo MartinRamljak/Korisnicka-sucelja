@@ -13,9 +13,6 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
     const [loading, setLoading] = useState<boolean>(true);
     const [posterId, setUserId] = useState<string | null>(null);
 
-    if (movieId === null && discussionId === null)
-        return (<p>Couldn't load comments</p>)
-
     // Fetch user data (this is always executed once)
     useEffect(() => {
         const loadUser = async () => {
@@ -91,6 +88,9 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
             setDiscussionComments(prevComments => [newComment as DiscussionCommentFields, ...prevComments]);
         }
     };
+    
+    if (movieId === null && discussionId === null)
+        return (<p>Couldn't load comments</p>)
 
     if (loading) {
         return <div>Loading comments...</div>;
