@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Movie } from "@/src/types/types";
+import Link from "next/link";
 
 interface MovieImageDisplayProps {
   movies: Movie[];
@@ -14,18 +15,22 @@ export default function MovieImageDisplayOverlap({
   collectionTitle,
   imageType,
 }: MovieImageDisplayProps) {
+  // normalize collectionTitle -> slug
+  const slug = collectionTitle.replace(/\s+/g, "-");
+
   return (
-    <div className="flex flex-col gap-4 w-full mx-auto px-2 sm:px-4">
+    <Link
+      className="flex flex-col gap-4 w-full mx-auto px-2 sm:px-4"
+      id={slug}
+      href={`/collections#${slug}`}
+    >
       <div
         className="relative w-full sm:aspect-[5/2] md:aspect-[7/2] lg:aspect-[5/8]"
         style={{
-          
-                display: "grid",
-                gridTemplateColumns: "repeat(15, minmax(0, 1fr))",
-                gridTemplateRows: "repeat(15, minmax(0, 1fr))",
-              }}
-            
-        
+          display: "grid",
+          gridTemplateColumns: "repeat(15, minmax(0, 1fr))",
+          gridTemplateRows: "repeat(15, minmax(0, 1fr))",
+        }}
       >
         {movies.map((movie, idx) => {
           const zIndex = 30 - idx * 10;
@@ -34,14 +39,9 @@ export default function MovieImageDisplayOverlap({
             return movie.poster_path ? (
               <div
                 key={movie.id}
-                className={`
-                  relative aspect-[2/3] 
-                  w-[100%] sm:w-[100%] md:w-full 
-                  mx-auto
-                `}
+                className="relative aspect-[2/3] w-[100%] sm:w-[100%] md:w-full mx-auto"
                 style={{
                   zIndex,
-                  // Only stagger images from md and up
                   gridColumn:
                     idx === 0
                       ? "1 / span 13"
@@ -80,6 +80,6 @@ export default function MovieImageDisplayOverlap({
       <h2 className="mb-4 text-xs sm:text-base md:text-2xl lg:text-3xl text-center">
         {collectionTitle}
       </h2>
-    </div>
+    </Link>
   );
 }

@@ -1,20 +1,17 @@
 .search-bar-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    margin: 0 auto;
     padding: 20px 0 0 0;
     gap: 10px;
     height: clamp(50px, 7vw, 70px);
-    margin-left: auto;
-    margin-right: auto;
     justify-content: center;
-    align-content: center;
+    align-items: center;
     position: relative; /* for dropdown positioning */
 }
 
 .search-bar {
     width: 90%;
-    min-width: 276px;
     background-color: var(--light-primary);
     border-radius: 10px;
     border-width: 2.5px;
@@ -22,6 +19,8 @@
     border-style: solid;
     font-size: clamp(1rem, 2.5vw, 1.5rem);
     color: var(--dark-primary);
+    padding: 7px 12px; 
+    line-height: normal; 
 }
 
 .search-filters {

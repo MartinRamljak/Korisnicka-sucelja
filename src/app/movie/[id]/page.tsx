@@ -5,7 +5,7 @@ import { Navigation } from "@/src/components/navigation/navigation";
 import Header from "@/src/components/header/header";
 import { Clapperboard } from "lucide-react";
 import type { Metadata } from "next";
-
+import  LikeButton  from "@/src/components/like/likeButton"
 type Props = { params: { id: string } };
 
 // Dynamic metadata for browser tab
@@ -52,6 +52,7 @@ export default async function MoviePage({ params }: Props) {
                 fill
                 className="object-cover rounded-xl shadow-xl"
               />
+              <LikeButton movieId={movie.id.toString()}/>
             </div>
           )}
 
