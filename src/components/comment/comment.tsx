@@ -12,56 +12,43 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
     const [loading, setLoading] = useState<boolean>(true);
 
     if (movieId === null && discussionId === null)
-        return (<p>Couldn't load comments</p>)
+        return (<p>Couldn&apos;t load comments</p>)
 
     useEffect(() => {
-        if(movieId !== null)
-        {
-            const fetchMovieComments = async () => {
+    const fetchComments = async () => {
+        setLoading(true);
+
+        try {
+            if (movieId !== null) {
                 const query: Record<string, unknown> = {
                     content_type: 'movieComments',
                     'fields.movieId': movieId,
                     limit: 100,
                 };
 
-                try {
-                    const response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
-
-                    const fetchedComments = response.items.map(item => item.fields);
-                    setMovieComments(fetchedComments);
-                } catch (error) {
-                    console.error('Error fetching comments:', error);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            fetchMovieComments();
-        }
-        else if (discussionId !== null)
-        {
-            const fetchDiscussionComments = async () => {
+                const response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
+                const fetchedComments = response.items.map(item => item.fields);
+                setMovieComments(fetchedComments);
+            } else if (discussionId !== null) {
                 const query: Record<string, unknown> = {
                     content_type: 'discussionComments',
                     'fields.discussionId': discussionId,
                     limit: 100,
                 };
 
-                try {
-                    const response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
-
-                    const fetchedComments = response.items.map(item => item.fields);
-                    setDiscussionComments(fetchedComments);
-                } catch (error) {
-                    console.error('Error fetching comments:', error);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            fetchDiscussionComments();
+                const response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
+                const fetchedComments = response.items.map(item => item.fields);
+                setDiscussionComments(fetchedComments);
+            }
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+        } finally {
+            setLoading(false);
         }
-    }, [movieId, discussionId]);
+    };
+
+    fetchComments();
+}, [movieId, discussionId]); 
 
     const handleNewComment = (newComment: MovieCommentFields | DiscussionCommentFields) => {
         if (movieId) {

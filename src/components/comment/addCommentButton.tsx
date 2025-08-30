@@ -4,8 +4,9 @@ import styles from "./comment.module.css";
 import { useState, useEffect } from "react";
 import { supabase, UserProfile } from "@/src/lib/supabase";
 import { createMovieComment, createDiscussionComment, generateUniqueCommentId } from "../../lib/contentful"
+import { MovieCommentFields, DiscussionCommentFields } from '../../types/contentful';
 
-const AddComment: React.FC<{movieId: number | null, discussionId: number | null, onCommentAdded: (newComment: any) => void }> = ({movieId, discussionId, onCommentAdded}) => {
+const AddComment: React.FC<{movieId: number | null, discussionId: number | null, onCommentAdded: (newComment: MovieCommentFields | DiscussionCommentFields) => void }> = ({movieId, discussionId, onCommentAdded}) => {
   const [posterId, setUserId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [commentText, setComment] = useState<string>('');
@@ -79,7 +80,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
             await createMovieComment(newMovieComment);
             alert("Comment added successfully!");
             onCommentAdded(newMovieComment);
-        } catch (error) {
+        } catch (_) {
             alert("Failed to add comment.");
         }
     }
@@ -98,7 +99,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
             await createDiscussionComment(newDiscussionComment);
             alert("Comment added successfully!");
             onCommentAdded(newDiscussionComment);
-        } catch (error) {
+        } catch (_) {
             alert("Failed to add comment.");
         }
     }
