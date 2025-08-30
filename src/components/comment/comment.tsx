@@ -44,19 +44,15 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                     const response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
                     const fetchedComments = response.items.map(item => item.fields);
 
-                    if(posterId) {
-                        const sortedComments = fetchedComments.sort((a, b) => {
-                            if (a.posterId === posterId && b.posterId !== posterId) {
-                                return -1; // Move a to the top
-                            } else if (b.posterId === posterId && a.posterId !== posterId) {
-                                return 1; // Move b to the top
-                            }
-                            return 0; // Keep the rest in the same order
-                        });
-                        setMovieComments(sortedComments);
-                    } else {
-                        setMovieComments(fetchedComments);
-                    }
+                    const sortedComments = fetchedComments.sort((a, b) => {
+                        if (a.posterId === posterId && b.posterId !== posterId) {
+                            return -1; // Move a to the top
+                        } else if (b.posterId === posterId && a.posterId !== posterId) {
+                            return 1; // Move b to the top
+                        }
+                        return 0; // Keep the rest in the same order
+                    });
+                    setMovieComments(sortedComments);
                 } else if (discussionId !== null) {
                     // Fetch discussion comments
                     const query: Record<string, unknown> = {
@@ -68,19 +64,15 @@ const Comments: React.FC<{ movieId: number | null, discussionId: number | null }
                     const response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
                     const fetchedComments = response.items.map(item => item.fields);
 
-                    if(posterId) {
-                        const sortedComments = fetchedComments.sort((a, b) => {
-                            if (a.posterId === posterId && b.posterId !== posterId) {
-                                return -1; // Move a to the top
-                            } else if (b.posterId === posterId && a.posterId !== posterId) {
-                                return 1; // Move b to the top
-                            }
-                            return 0; // Keep the rest in the same order
-                        });
-                        setDiscussionComments(sortedComments);
-                    } else {
-                        setDiscussionComments(fetchedComments);
-                    }
+                    const sortedComments = fetchedComments.sort((a, b) => {
+                        if (a.posterId === posterId && b.posterId !== posterId) {
+                            return -1; // Move a to the top
+                        } else if (b.posterId === posterId && a.posterId !== posterId) {
+                            return 1; // Move b to the top
+                        }
+                        return 0; // Keep the rest in the same order
+                    });
+                    setDiscussionComments(sortedComments);
                 }
             } catch (error) {
                 console.error('Error fetching comments:', error);
