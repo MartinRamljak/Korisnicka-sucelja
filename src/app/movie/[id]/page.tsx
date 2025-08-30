@@ -3,6 +3,7 @@ import { Movie } from "@/src/types/types";
 import { fetchMovieById } from "@/src/lib/fetchMovieById";
 import { Navigation } from "@/src/components/navigation/navigation";
 import Header from "@/src/components/header/header";
+import Comments from "../../../components/comment/comment"
 import { Clapperboard } from "lucide-react";
 import type { Metadata } from "next";
 import  LikeButton  from "@/src/components/like/likeButton"
@@ -20,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MoviePage({ params }: Props) {
   const { id } = params;
   const movie: Movie = await fetchMovieById(id);
+  const idNum = parseInt(id, 10)
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -93,6 +95,7 @@ export default async function MoviePage({ params }: Props) {
             </div>
           </div>
         </div>
+        <Comments movieId={idNum} discussionId={null} />
       </div>
     </div>
   );
