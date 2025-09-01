@@ -65,35 +65,43 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
     if(!posterUsername)
         return
 
-    if(movieId)
-    {
-        const commentId = await generateUniqueCommentId('movieComments', movieId);
-        const newMovieComment = {
-            movieId: movieId,
-            commentId: commentId,
-            commentText: commentText,
-            posterUsername: posterUsername,
-            posterId: posterId || '',
-        };
+    try {
+      if(movieId)
+      {
+          const commentId = await generateUniqueCommentId('movieComments', movieId);
+          if(!commentId)
+            throw  new Error("Error generating unique commentId")
+          const newMovieComment = {
+              movieId: movieId,
+              commentId: commentId,
+              commentText: commentText,
+              posterUsername: posterUsername,
+              posterId: posterId || '',
+          };
 
-        await createMovieComment(newMovieComment);
-        alert("Comment added successfully!");
-        onCommentAdded(newMovieComment);
-    }
-    else if(discussionId)
-    {
-        const commentId = await generateUniqueCommentId('movieComments', discussionId);
-        const newDiscussionComment = {
-            discussionId: discussionId,
-            commentId: commentId,
-            commentText: commentText,
-            posterUsername: posterUsername,
-            posterId: posterId || '',
-        };
+          await createMovieComment(newMovieComment);
+          alert("Comment added successfully!");
+          onCommentAdded(newMovieComment);
+      }
+      else if(discussionId)
+      {
+          const commentId = await generateUniqueCommentId('movieComments', discussionId);
+          if(!commentId)
+            throw  new Error("Error generating unique commentId")
+          const newDiscussionComment = {
+              discussionId: discussionId,
+              commentId: commentId,
+              commentText: commentText,
+              posterUsername: posterUsername,
+              posterId: posterId || '',
+          };
 
-        await createDiscussionComment(newDiscussionComment);
-        alert("Comment added successfully!");
-        onCommentAdded(newDiscussionComment);
+          await createDiscussionComment(newDiscussionComment);
+          alert("Comment added successfully!");
+          onCommentAdded(newDiscussionComment);
+      }
+    } catch (err) {
+      console.error('Error fetching profile', err);
     }
 
     setComment('');

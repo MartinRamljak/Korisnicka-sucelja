@@ -78,43 +78,43 @@ export const createDiscussionComment = async (comment: DiscussionCommentFields) 
   }
 };
 
-export const generateUniqueCommentId = async (contentType: string, parentId: number): Promise<number> => {
-  let uniqueId = Math.floor(Math.random() * 1000000);
+export const generateUniqueCommentId = async (contentType: string, parentId: number): Promise<number | null> => {
 
-  while (await checkCommentIdExists(contentType, parentId, uniqueId)) {
-    uniqueId = Math.floor(Math.random() * 1000000);
-  }
+  const newestId = await returnNewestCommentId(contentType, parentId)
 
-  return uniqueId;
+  if(newestId)
+    return newestId + 1
+
+  return null
 };
 
-const checkCommentIdExists = async (contentType: string, parentId: number, commentId: number): Promise<boolean> => {
+const returnNewestCommentId = async (contentType: string, parentId: number): Promise<number | null> => {
   try {
     if(contentType == 'movieComments')
     {
       const query = {
-        content_type: contentType,
-        'fields.movieId': parentId,
-        'fields.commentId': commentId,
+        content_type: 'movieComments',
+        order: '-fields.commentId',
         limit: 1,
       }
       const response = await contentfulClient.getEntries(query);
-      return response.items.length > 0;
+      const entry = response.items[0];
+      return entry?.fields.commentId as number ?? null;
     }
     else if(contentType == 'discussionComments')
     {
       const query = {
-        content_type: contentType,
-        'fields.discussionId': parentId,
-        'fields.commentId': commentId,
+        content_type: 'discussionComments',
+        order: '-fields.commentId',
         limit: 1,
       }
       const response = await contentfulClient.getEntries(query);
-      return response.items.length > 0;
+      const entry = response.items[0];
+      return entry?.fields.commentId as number ?? null;
     }
-    return false;
+    return null;
   } catch (error) {
     console.error('Error checking comment ID:', error);
-    return false;
+    return null;
   }
 };
