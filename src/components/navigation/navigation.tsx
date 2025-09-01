@@ -141,3 +141,5 @@ type Page = {
       </nav>
     );
 }
+
+export default Navigation;

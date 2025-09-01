@@ -1,6 +1,6 @@
 import { createClient as createDeliveryClient } from 'contentful'; // Delivery API for reading data
 import { createClient as createManagementClient } from 'contentful-management'; // Management API for writing data
-import { MovieCommentFields, DiscussionCommentFields, MovieRatingFields } from '../types/contentful'
+import { MovieCommentFields, MovieCommentSkeleton, DiscussionCommentFields, DiscussionCommentSkeleton, MovieRatingFields } from '../types/contentful'
 import { Node, Document as RichTextDocument } from '@contentful/rich-text-types';
 
 // Fetch the space and access token from environment variables
@@ -91,31 +91,35 @@ export const generateUniqueCommentId = async (contentType: string, parentId: num
 
 const returnNewestCommentId = async (contentType: string, parentId: number): Promise<number | null> => {
   try {
-    if(contentType == 'movieComments')
-    {
-      const query = {
+    let query: Record<string, unknown>;
+    let response;
+
+    if (contentType === 'movieComments') {
+      query = {
         content_type: 'movieComments',
-        movieId: parentId,
+        'fields.movieId': parentId,
         order: '-fields.commentId',
         limit: 1,
-      }
-      const response = await contentfulClient.getEntries(query);
-      const entry = response.items[0];
-      return entry?.fields.commentId as number ?? null;
-    }
-    else if(contentType == 'discussionComments')
-    {
-      const query = {
+      };
+
+      response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
+    } else if (contentType === 'discussionComments') {
+      query = {
         content_type: 'discussionComments',
-        discussionId: parentId,
+        'fields.discussionId': parentId,
         order: '-fields.commentId',
         limit: 1,
-      }
-      const response = await contentfulClient.getEntries(query);
-      const entry = response.items[0];
-      return entry?.fields.commentId as number ?? null;
+      };
+
+      response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
+    } else {
+      return null;
     }
-    return null;
+
+    const entry = response.items?.[0];
+    const commentId = entry?.fields?.commentId;
+
+    return typeof commentId === 'number' ? commentId : null;
   } catch (error) {
     console.error('Error checking comment ID:', error);
     return null;

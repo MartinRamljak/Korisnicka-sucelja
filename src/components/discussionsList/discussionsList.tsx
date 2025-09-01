@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { DiscussionFields } from '../../types/contentful';
 import { richTextToPlainText } from '../../lib/contentful'
 import { fetchAllDiscussions } from '../../lib/fetchAllDiscussions';
+import Link from 'next/link';
 
 const DiscussionsList: React.FC = () => {
   const [discussions, setDiscussions] = useState<DiscussionFields[]>([]);
@@ -21,18 +22,20 @@ const DiscussionsList: React.FC = () => {
 
   return (
     <div className={styles['discussions-container']}>
-      {discussions.map(({ title, post, posterUsername }, idx) => {
+      {discussions.map(({ title, post, posterUsername, discussionId }, idx) => {
       const plainText = richTextToPlainText(post);
       const previewText = plainText.length > 200
         ? plainText.slice(0, 200) + '...'
         : plainText;
 
       return (
-        <article key={idx} className={styles['discussion']}>
-          <h2 className="text-xl font-bold">{title}</h2>
-          <p className="text-sm text-gray-600">~{posterUsername}</p>
-          <p>{previewText}</p>
-        </article>
+        <Link href={`/discussions/${discussionId}`} className={styles['discussion-link']}>
+          <article className={styles['discussion']}>
+            <h2 className="text-xl font-bold">{title}</h2>
+            <p className="text-sm text-gray-600">~{posterUsername}</p>
+            <p>{previewText}</p>
+          </article>
+        </Link>
       );
     })}
     </div>

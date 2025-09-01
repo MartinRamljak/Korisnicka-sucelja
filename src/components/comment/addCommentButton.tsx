@@ -85,7 +85,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
       }
       else if(discussionId)
       {
-          const commentId = await generateUniqueCommentId('movieComments', discussionId);
+          const commentId = await generateUniqueCommentId('discussionComments', discussionId);
           if(!commentId)
             throw  new Error("Error generating unique commentId")
           const newDiscussionComment = {
