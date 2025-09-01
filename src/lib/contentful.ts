@@ -1,7 +1,7 @@
 import { createClient as createDeliveryClient } from 'contentful'; // Delivery API for reading data
 import { createClient as createManagementClient } from 'contentful-management'; // Management API for writing data
 import { MovieCommentFields, DiscussionCommentFields, MovieRatingFields } from '../types/contentful'
-import { BLOCKS, INLINES, MARKS, Node, Document as RichTextDocument } from '@contentful/rich-text-types';
+import { Node, Document as RichTextDocument } from '@contentful/rich-text-types';
 
 // Fetch the space and access token from environment variables
 const spaceId = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
