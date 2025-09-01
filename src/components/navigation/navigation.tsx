@@ -122,7 +122,7 @@ type Page = {
 
     const filteredPages = user ? pages.filter(page => page.title !== 'Login/Signup') : pages.filter(page => page.title !== 'User Profile')
     return (
-      <nav className={`sticky top-0 z-10 ${styles.navbg}`}>
+      <nav className={`sticky top-0 z-20 ${styles.navbg}`}>
         <div className="container flex justify-between">
           {/* Visible on mobile */}
           <Hamburger isOpen={isMenuOpen} toggleMenu={toggleMenu}/>

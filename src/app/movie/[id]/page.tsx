@@ -7,6 +7,8 @@ import Comments from "../../../components/comment/comment"
 import { Clapperboard } from "lucide-react";
 import type { Metadata } from "next";
 import  LikeButton  from "@/src/components/like/likeButton"
+import Rating from "@/src/components/rating/rating"
+
 type Props = { params: { id: string } };
 
 // Dynamic metadata for browser tab
@@ -72,26 +74,29 @@ export default async function MoviePage({ params }: Props) {
 
             {/* Stats */}
             <div className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-gray-300 mt-2">
-              <div className="flex items-center gap-1">
-                <Image 
-                  src="/images/star.png" 
-                  alt="Star" 
-                  width={16} 
-                  height={16} 
-                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-                />
-                <span className="text-xs sm:text-sm md:text-base">{movie.vote_average.toFixed(1)}</span>
-              </div>
-              <div className="flex items-center gap-1"> 
-                <Image 
-                  src="/images/heart.png" 
-                  alt="Heart"
-                  width={16} 
-                  height={16} 
-                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" 
-                /> 
-                <span className="text-xs sm:text-sm md:text-base">{Math.floor(movie.popularity)}</span>
-              </div>
+              <div className="flex justify-between items-center gap-4 sm:gap-6">
+                <div className="flex items-center gap-1">
+                  <Image 
+                    src="/images/star.png" 
+                    alt="Star" 
+                    width={16} 
+                    height={16} 
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+                  />
+                  <span className="text-xs sm:text-sm md:text-base">{movie.vote_average.toFixed(1)}</span>
+                </div>
+                <div className="flex items-center gap-1"> 
+                  <Image 
+                    src="/images/heart.png" 
+                    alt="Heart"
+                    width={16} 
+                    height={16} 
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" 
+                  /> 
+                  <span className="text-xs sm:text-sm md:text-base">{Math.floor(movie.popularity)}</span>
+                  </div>
+                </div>
+                  <Rating movieId={idNum} />
             </div>
           </div>
         </div>
