@@ -40,7 +40,7 @@ export default async function DiscussionPage({ params }: Props) {
 
       <div className="max-w-3xl mx-auto p-4 sm:p-6">
         <h1 className="text-2xl sm:text-3xl font-bold mb-2">{discussion.title}</h1>
-        <p className="text-sm text-gray-500 mb-4">Posted by: {discussion.posterUsername}</p>
+        <p className="text-sm text-gray-500 mb-4">~{discussion.posterUsername}</p>
 
         <div className="prose dark:prose-invert max-w-none">
           {documentToReactComponents(discussion.post)}

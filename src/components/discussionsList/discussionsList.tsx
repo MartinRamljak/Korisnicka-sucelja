@@ -21,15 +21,19 @@ const DiscussionsList: React.FC = () => {
   if (loading) return <p>Loading discussions...</p>;
 
   return (
-    <div className={styles['discussions-container']}>
-      {discussions.map(({ title, post, posterUsername, discussionId }, idx) => {
+  <div className={styles['discussions-container']}>
+    {discussions.map(({ title, post, posterUsername, discussionId }) => {
       const plainText = richTextToPlainText(post);
       const previewText = plainText.length > 200
         ? plainText.slice(0, 200) + '...'
         : plainText;
 
       return (
-        <Link href={`/discussions/${discussionId}`} className={styles['discussion-link']}>
+        <Link
+          href={`/discussions/${discussionId}`}
+          key={discussionId}
+          className={styles['discussion-link']}
+        >
           <article className={styles['discussion']}>
             <h2 className="text-xl font-bold">{title}</h2>
             <p className="text-sm text-gray-600">~{posterUsername}</p>
@@ -38,8 +42,8 @@ const DiscussionsList: React.FC = () => {
         </Link>
       );
     })}
-    </div>
-  );
+  </div>
+);
 };
 
 export default DiscussionsList;
