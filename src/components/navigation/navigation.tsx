@@ -19,10 +19,6 @@ type Page = {
       path: "/collections",
     },
     {
-      title: "Reviews",
-      path: "/reviews",
-    },
-    {
       title: "Discussions",
       path: "/discussions",
     },

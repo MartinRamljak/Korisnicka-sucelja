@@ -1,6 +1,7 @@
 import { createClient as createDeliveryClient } from 'contentful'; // Delivery API for reading data
 import { createClient as createManagementClient } from 'contentful-management'; // Management API for writing data
 import { MovieCommentFields, DiscussionCommentFields, MovieRatingFields } from '../types/contentful'
+import { BLOCKS, INLINES, MARKS, Node, Document as RichTextDocument } from '@contentful/rich-text-types';
 
 // Fetch the space and access token from environment variables
 const spaceId = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
@@ -193,3 +194,15 @@ export const upsertMovieRating = async (rating: MovieRatingFields) => {
     throw error;
   }
 };
+
+export function richTextToPlainText(node: Node | RichTextDocument): string {
+  if ('content' in node && Array.isArray(node.content)) {
+    return node.content.map(richTextToPlainText).join('');
+  }
+
+  if ('value' in node && typeof node.value === 'string') {
+    return node.value;
+  }
+
+  return '';
+}

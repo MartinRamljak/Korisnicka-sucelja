@@ -10,7 +10,7 @@ export interface DiscussionFields {
 
 export interface DiscussionSkeleton extends EntrySkeletonType {
   fields: DiscussionFields;
-  contentTypeId: 'discussions';
+  contentTypeId: 'discussion';
 }
 
 export interface DiscussionCommentFields {
