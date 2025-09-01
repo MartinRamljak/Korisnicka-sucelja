@@ -1,0 +1,11 @@
+.discussions-container {
+    margin: 20px;
+    width: 90%;
+}
+
+.discussion {
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    padding: 8px;
+    margin-bottom: 16px;
+}
