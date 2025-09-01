@@ -88,7 +88,7 @@ export default function UserProfilePage() {
 
           {/* Favorites */}
           {favoriteMovies.length > 0 && (
-            <div className="w-full max-w-[80%] mx-auto"> {/* <-- narrower wrapper */}
+            <div className="w-full max-w-[80%] mx-auto">
               <MovieImageDisplayGrid
                 movies={favoriteMovies}
                 collectionTitle="Your Favorites"
