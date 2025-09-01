@@ -13,17 +13,14 @@ if (!spaceId || !accessToken || !managementAccessToken) {
 }
 
 // Create Contentful Delivery API client (for fetching data)
-{/*export const contentfulClient = createDeliveryClient({
+export const contentfulClient = createDeliveryClient({
   space: spaceId,
   accessToken: accessToken,
-});*/}
+});
 
 
-
-// Old raw client creation (comment out or remove)
-// export const contentfulClient = createDeliveryClient({ ... });
-
-const rawClient = createDeliveryClient({
+//this delivery client will print out api calls!!!
+{/*const rawClient = createDeliveryClient({
   space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string,
   accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string,
 });
@@ -55,7 +52,7 @@ export const contentfulClient = new Proxy(rawClient, {
 
     return orig;
   },
-});
+});*/}
 
 
 // Create Contentful Management API client (for creating/updating entries)
