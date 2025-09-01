@@ -1,21 +1,14 @@
-import { createClient } from 'contentful';
-import { DiscussionSkeleton, DiscussionFields } from '../types/contentful';
+import { contentfulClient } from '../lib/contentful';
+import { DiscussionSkeleton } from '../types/contentful';
+import { Entry } from 'contentful';
 
-const client = createClient({
-  space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN!,
-});
+export async function fetchDiscussionById(id: number): Promise<Entry<DiscussionSkeleton> | null> {
+  const query: Record<string, any> = {
+    content_type: 'discussion',
+    limit: 1,
+    'fields.discussionId': id,
+  };
 
-export async function fetchDiscussionById(id: number): Promise<DiscussionFields | null> {
-  const query: Record<string, unknown> = {
-        content_type: 'discussion',
-        limit: 1,
-        'fields.discussionId': id,
-    };
-
-    const response = await client.getEntries<DiscussionSkeleton>(query);
-
-  if (!response.items.length) return null;
-
-  return response.items[0].fields;
+  const response = await contentfulClient.getEntries<DiscussionSkeleton>(query);
+  return response.items[0] ?? null;
 }

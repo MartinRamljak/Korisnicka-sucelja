@@ -1,6 +1,6 @@
 import { createClient as createDeliveryClient } from 'contentful'; // Delivery API for reading data
 import { createClient as createManagementClient } from 'contentful-management'; // Management API for writing data
-import { MovieCommentFields, MovieCommentSkeleton, DiscussionCommentFields, DiscussionCommentSkeleton, MovieRatingFields } from '../types/contentful'
+import { MovieCommentFields, MovieCommentSkeleton, DiscussionCommentFields, DiscussionCommentSkeleton, DiscussionFields, DiscussionSkeleton, MovieRatingFields } from '../types/contentful'
 import { Node, Document as RichTextDocument } from '@contentful/rich-text-types';
 
 // Fetch the space and access token from environment variables
@@ -98,7 +98,7 @@ const returnNewestCommentId = async (contentType: string, parentId: number): Pro
       query = {
         content_type: 'movieComments',
         'fields.movieId': parentId,
-        order: '-fields.commentId',
+        order: ['-fields.commentId'], // wrapped in array
         limit: 1,
       };
 
@@ -107,7 +107,7 @@ const returnNewestCommentId = async (contentType: string, parentId: number): Pro
       query = {
         content_type: 'discussionComments',
         'fields.discussionId': parentId,
-        order: '-fields.commentId',
+        order: ['-fields.commentId'], // wrapped in array
         limit: 1,
       };
 
@@ -210,3 +210,81 @@ export function richTextToPlainText(node: Node | RichTextDocument): string {
 
   return '';
 }
+
+export const createDiscussion = async (fields: DiscussionFields) => {
+  const space = await managementClient.getSpace(spaceId);
+  const environment = await space.getEnvironment('master');
+
+  const entry = await environment.createEntry('discussion', {
+    fields: {
+      discussionId: { 'en-US': fields.discussionId },
+      title: { 'en-US': fields.title },
+      post: { 'en-US': fields.post }, // 💡 Rich Text wrapped in locale
+      posterUsername: { 'en-US': fields.posterUsername },
+    },
+  });
+
+  await entry.publish();
+  return entry;
+};
+
+export const generateUniqueDiscussionId = async (): Promise<number> => {
+  try {
+    const response = await contentfulClient.getEntries<DiscussionSkeleton>({
+      content_type: 'discussion',
+      order: ['-sys.createdAt'], // Most recent discussion
+      limit: 1,
+    });
+    const latestId = response.items[0]?.fields?.discussionId;
+    return typeof latestId === 'number' ? latestId + 1 : 1;
+  } catch (err) {
+    console.error('Error generating unique discussion ID:', err);
+    return 1;
+  }
+};
+
+export const uploadImageAsset = async (file: File): Promise<string> => {
+  try {
+    const space = await managementClient.getSpace(spaceId);
+    const environment = await space.getEnvironment('master');
+
+    const upload = await environment.createUpload({
+      file: await file.arrayBuffer(),
+    });
+
+    const asset = await environment.createAsset({
+      fields: {
+        title: { 'en-US': file.name },
+        description: { 'en-US': 'Uploaded by user' },
+        file: {
+          'en-US': {
+            contentType: file.type,
+            fileName: file.name,
+            uploadFrom: {
+              sys: {
+                type: 'Link',
+                linkType: 'Upload',
+                id: upload.sys.id,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await asset.processForAllLocales();
+
+    // Wait for processing to complete (optional but safer)
+    let processedAsset = await environment.getAsset(asset.sys.id);
+    while (!processedAsset.fields.file?.['en-US']?.url) {
+      await new Promise((res) => setTimeout(res, 1000));
+      processedAsset = await environment.getAsset(asset.sys.id);
+    }
+
+    const publishedAsset = await processedAsset.publish();
+    return publishedAsset.sys.id;
+  } catch (error) {
+    console.error('Error uploading asset:', error);
+    throw error;
+  }
+};
