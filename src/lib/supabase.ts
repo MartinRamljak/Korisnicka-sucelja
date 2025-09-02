@@ -10,5 +10,5 @@ export interface UserProfile {
   username: string;
   created_at: string;
   favoritesIDs: string[];
-  myReviewsIDs: string[];
+  participatedDiscussionsIDs: number[];
 }

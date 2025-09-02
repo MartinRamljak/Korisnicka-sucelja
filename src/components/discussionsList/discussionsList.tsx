@@ -3,35 +3,12 @@
 import styles from './discussionsList.module.css';
 import { useEffect, useState } from 'react';
 import type { DiscussionFields, DiscussionSkeleton } from '@/src/types/contentful';
-import { richTextToPlainText } from '@/src/lib/contentful';
+import { richTextToPlainText, extractLocale } from '@/src/lib/contentful';
 import { contentfulClient } from '@/src/lib/contentful';
 import AddDiscussion from './addDiscussionButton';
 import Link from 'next/link';
 import React from 'react';
 import type { Document as RichTextDocument } from '@contentful/rich-text-types';
-
-function isRichTextDocument(obj: unknown): obj is RichTextDocument {
-  return (
-    typeof obj === 'object' &&
-    obj !== null &&
-    'nodeType' in obj &&
-    (obj as { nodeType?: unknown }).nodeType === 'document'
-  );
-}
-
-function extractLocale<T>(value: Record<string, T> | T | undefined): T | undefined {
-  if (value == null) return undefined;
-
-  if (
-    typeof value !== 'object' ||
-    Array.isArray(value) ||
-    isRichTextDocument(value)
-  ) {
-    return value as T;
-  }
-
-  return (value as Record<string, T>)['en-US'] ?? Object.values(value as Record<string, T>)[0];
-}
 
 const DiscussionsList: React.FC = () => {
   const [discussions, setDiscussions] = useState<DiscussionFields[]>([]);

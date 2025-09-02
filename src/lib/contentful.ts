@@ -275,3 +275,26 @@ export const uploadImageAsset = async (file: File): Promise<string> => {
     throw error;
   }
 };
+
+function isRichTextDocument(obj: unknown): obj is RichTextDocument {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'nodeType' in obj &&
+    (obj as { nodeType?: unknown }).nodeType === 'document'
+  );
+}
+
+export function extractLocale<T>(value: Record<string, T> | T | undefined): T | undefined {
+  if (value == null) return undefined;
+
+  if (
+    typeof value !== 'object' ||
+    Array.isArray(value) ||
+    isRichTextDocument(value)
+  ) {
+    return value as T;
+  }
+
+  return (value as Record<string, T>)['en-US'] ?? Object.values(value as Record<string, T>)[0];
+}

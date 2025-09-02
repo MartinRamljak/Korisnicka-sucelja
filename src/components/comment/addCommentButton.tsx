@@ -12,6 +12,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
   const [commentText, setComment] = useState<string>('');
   const [charCount, setCharCount] = useState<number>(0);
   const [posterUsername, setUsername] = useState<string | null>(null);
+  const [currentIDs, setCurrentIDs] = useState<number[]>([])
 
   useEffect(() => {
     const loadUser = async () => {
@@ -51,6 +52,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
 
       const data: UserProfile = await response.json();
       setUsername(data.username);
+      setCurrentIDs(data.participatedDiscussionsIDs)
     } catch (err) {
       console.error('Error fetching profile', err);
     }
@@ -68,37 +70,50 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
     try {
       if(movieId)
       {
-          const commentId = await generateUniqueCommentId('movieComments', movieId);
-          if(!commentId)
-            throw  new Error("Error generating unique commentId")
-          const newMovieComment = {
-              movieId: movieId,
-              commentId: commentId,
-              commentText: commentText,
-              posterUsername: posterUsername,
-              posterId: posterId || '',
-          };
+        const commentId = await generateUniqueCommentId('movieComments', movieId);
+        if(!commentId)
+          throw  new Error("Error generating unique commentId")
+        const newMovieComment = {
+            movieId: movieId,
+            commentId: commentId,
+            commentText: commentText,
+            posterUsername: posterUsername,
+            posterId: posterId || '',
+        };
 
-          await createMovieComment(newMovieComment);
-          alert("Comment added successfully!");
-          onCommentAdded(newMovieComment);
+        await createMovieComment(newMovieComment);
+        alert("Comment added successfully!");
+        onCommentAdded(newMovieComment);
       }
       else if(discussionId)
       {
-          const commentId = await generateUniqueCommentId('discussionComments', discussionId);
-          if(!commentId)
-            throw  new Error("Error generating unique commentId")
-          const newDiscussionComment = {
-              discussionId: discussionId,
-              commentId: commentId,
-              commentText: commentText,
-              posterUsername: posterUsername,
-              posterId: posterId || '',
-          };
+        const commentId = await generateUniqueCommentId('discussionComments', discussionId);
+        if(!commentId)
+          throw  new Error("Error generating unique commentId")
+        const newDiscussionComment = {
+            discussionId: discussionId,
+            commentId: commentId,
+            commentText: commentText,
+            posterUsername: posterUsername,
+            posterId: posterId || '',
+        };
 
-          await createDiscussionComment(newDiscussionComment);
-          alert("Comment added successfully!");
-          onCommentAdded(newDiscussionComment);
+        await createDiscussionComment(newDiscussionComment);
+        alert("Comment added successfully!");
+        onCommentAdded(newDiscussionComment);
+
+        const updatedIDs = [...currentIDs, discussionId];
+
+        const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ participatedDiscussionsIDs: updatedIDs })
+        .eq('id', posterId);
+
+        if (updateError) {
+          console.error('Failed to update participatedDiscussionsIDs:', updateError);
+        } else {
+          console.log('Discussion ID added successfully');
+        }
       }
     } catch (err) {
       console.error('Error fetching profile', err);

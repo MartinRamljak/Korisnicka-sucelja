@@ -18,6 +18,7 @@ interface Props {
 const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
   const [posterId, setPosterId] = useState<string | null>(null);
   const [posterUsername, setPosterUsername] = useState<string | null>(null);
+  const [currentIDs, setCurrentIDs] = useState<number[]>([])
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [postText, setPostText] = useState('');
@@ -34,7 +35,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
     })();
   }, []);
 
-  // Fetch username when posterId changes
+  // Fetch username and participated discussions when posterId changes
   useEffect(() => {
     if (posterId) {
       (async () => {
@@ -42,6 +43,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
         if (res.ok) {
           const data: UserProfile = await res.json();
           setPosterUsername(data.username);
+          setCurrentIDs(data.participatedDiscussionsIDs);
         }
       })();
     }
@@ -107,6 +109,19 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
 
     await createDiscussion(newDiscussion);
     onDiscussionAdded(newDiscussion);
+
+    const updatedIDs = [...currentIDs, discussionId];
+
+    const { error: updateError } = await supabase
+    .from('profiles')
+    .update({ participatedDiscussionsIDs: updatedIDs })
+    .eq('id', posterId);
+
+    if (updateError) {
+      console.error('Failed to update participatedDiscussionsIDs:', updateError);
+    } else {
+      console.log('Discussion ID added successfully');
+    }
 
     // Reset form
     setIsOpen(false);

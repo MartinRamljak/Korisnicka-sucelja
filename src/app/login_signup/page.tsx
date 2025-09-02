@@ -44,7 +44,7 @@ export default function AuthPage() {
           username: username,
           created_at: new Date(),
           favoritesIDs: [],
-          myReviewsIDs: [],
+          participatedDiscussionsIDs: [],
         },
       ])
 
