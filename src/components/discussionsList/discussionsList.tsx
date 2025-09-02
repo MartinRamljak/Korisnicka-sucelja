@@ -2,52 +2,20 @@
 
 import styles from './discussionsList.module.css';
 import { useEffect, useState } from 'react';
-import { DiscussionFields } from '@/src/types/contentful';
+import type { DiscussionFields, DiscussionSkeleton } from '@/src/types/contentful';
 import { richTextToPlainText } from '@/src/lib/contentful';
 import { contentfulClient } from '@/src/lib/contentful';
 import AddDiscussion from './addDiscussionButton';
 import Link from 'next/link';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
 import React from 'react';
+import type { Document as RichTextDocument } from '@contentful/rich-text-types';
 
-const renderOptions = {
-  renderNode: {
-    [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
-      const { file, title } = node.data.target.fields;
-      const url = file['en-US']?.url || file.url;
-      const contentType = file['en-US']?.contentType || file.contentType;
-
-      if (contentType?.startsWith('image/')) {
-        return <img src={url} alt={title?.['en-US'] || 'Embedded asset'} style={{ maxWidth: '100%' }} />;
-      }
-
-      if (contentType?.startsWith('video/')) {
-        return (
-          <video controls style={{ maxWidth: '100%' }}>
-            <source src={url} type={contentType} />
-            Your browser does not support the video tag.
-          </video>
-        );
-      }
-
-      return <p>Unsupported asset type</p>;
-    },
-
-    [INLINES.HYPERLINK]: (node: any, children: React.ReactNode) => {
-      const url = node.data.uri;
-      return (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: 'blue', textDecoration: 'underline' }}
-        >
-          {children}
-        </a>
-      );
-    },
-  },
-};
+function extractLocale<T>(value: Record<string, T> | T | undefined): T | undefined {
+  if (value == null) return undefined;
+  if (typeof value !== 'object' || Array.isArray(value)) return value as T;
+  // prefer en-US, fallback to any other locale
+  return (value as Record<string, T>)['en-US'] ?? Object.values(value as Record<string, T>)[0];
+}
 
 const DiscussionsList: React.FC = () => {
   const [discussions, setDiscussions] = useState<DiscussionFields[]>([]);
@@ -55,20 +23,41 @@ const DiscussionsList: React.FC = () => {
 
   const fetchDiscussions = async () => {
     try {
-      const response = await contentfulClient.getEntries({
+      const response = await contentfulClient.getEntries<DiscussionSkeleton>({
         content_type: 'discussion',
         order: ['-sys.createdAt'],
         include: 2,
+        limit: 50,
       });
 
-      const items: DiscussionFields[] = response.items.map((item: any) => ({
-        discussionId: item.fields.discussionId,
-        title: item.fields.title,
-        post: item.fields.post,
-        posterUsername: item.fields.posterUsername,
-      }));
+      console.log('Total entries', response.total);
+      console.log('Returned items', response.items.length);
 
-      setDiscussions(items);
+      const mapped = response.items.map(item => {
+        const f = item.fields;
+        const discussionId = extractLocale<number>(f.discussionId);
+        const title = extractLocale<string>(f.title);
+        const post = extractLocale<RichTextDocument>(f.post);
+        const posterUsername = extractLocale<string>(f.posterUsername);
+
+        if (discussionId == null ||
+            !title ||
+            !post ||
+            !posterUsername) {
+          console.warn('Skipping incomplete entry:', {
+            id: item.sys.id,
+            discussionId,
+            title,
+            post,
+            posterUsername,
+          });
+          return null;
+        }
+
+        return { discussionId, title, post, posterUsername };
+      });
+
+      setDiscussions(mapped.filter((d): d is DiscussionFields => d !== null));
     } catch (err) {
       console.error('Failed to fetch discussions:', err);
     } finally {
@@ -81,7 +70,7 @@ const DiscussionsList: React.FC = () => {
   }, []);
 
   const handleNewDiscussion = (newDiscussion: DiscussionFields) => {
-    setDiscussions((prev) => [newDiscussion, ...prev]);
+    setDiscussions(prev => [newDiscussion, ...prev]);
   };
 
   if (loading) return <p>Loading discussions...</p>;
@@ -90,10 +79,9 @@ const DiscussionsList: React.FC = () => {
   return (
     <div className={styles['discussions-container']}>
       <AddDiscussion onDiscussionAdded={handleNewDiscussion} />
-      {discussions.map((d) => {
+      {discussions.map(d => {
         const plain = richTextToPlainText(d.post);
         const preview = plain.length > 200 ? plain.slice(0, 200) + '...' : plain;
-
         return (
           <Link key={d.discussionId} href={`/discussions/${d.discussionId}`} className={styles['discussion-link']}>
             <article className={styles['discussion']}>

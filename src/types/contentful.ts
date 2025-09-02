@@ -8,7 +8,10 @@ export interface DiscussionFields {
   title: string;
 }
 
-export type DiscussionSkeleton = EntrySkeletonType<DiscussionFields, "discussion">;
+export interface DiscussionSkeleton extends EntrySkeletonType {
+  fields: DiscussionFields;
+  contentTypeId: 'discussion';
+}
 
 export interface DiscussionCommentFields {
   discussionId: number;

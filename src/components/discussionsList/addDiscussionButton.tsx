@@ -1,10 +1,15 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import styles from './discussionsList.module.css';
 import { supabase, UserProfile } from '@/src/lib/supabase';
 import { createDiscussion, generateUniqueDiscussionId, uploadImageAsset } from '@/src/lib/contentful';
 import { DiscussionFields } from '@/src/types/contentful';
-import { BLOCKS } from '@contentful/rich-text-types';
+import {
+  BLOCKS,
+  TopLevelBlock,
+  Document as RichTextDocument,
+} from '@contentful/rich-text-types';
 
 interface Props {
   onDiscussionAdded: (newDiscussion: DiscussionFields) => void;
@@ -19,27 +24,35 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
   const [charCount, setCharCount] = useState(0);
   const [file, setFile] = useState<File | null>(null);
 
+  // Get current user ID once on mount
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       setPosterId(user?.id ?? null);
     })();
   }, []);
 
-  const fetchUserProfile = async (userId: string) => {
-    const res = await fetch(`/api/getUserProfile?userId=${userId}`);
-    if (res.ok) {
-      const data: UserProfile = await res.json();
-      setPosterUsername(data.username);
+  // Fetch username when posterId changes
+  useEffect(() => {
+    if (posterId) {
+      (async () => {
+        const res = await fetch(`/api/getUserProfile?userId=${posterId}`);
+        if (res.ok) {
+          const data: UserProfile = await res.json();
+          setPosterUsername(data.username);
+        }
+      })();
     }
-  };
+  }, [posterId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!posterId || !title || (!postText && !file)) return;
-
-    await fetchUserProfile(posterId);
-    if (!posterUsername) return;
+    if (!posterId || !posterUsername || !title || (!postText && !file)) {
+      alert('Please fill all required fields.');
+      return;
+    }
 
     let assetId: string | null = null;
     if (file) {
@@ -48,31 +61,54 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
 
     const discussionId = await generateUniqueDiscussionId();
 
-    const contentNodes: any[] = [];
+    const contentNodes: TopLevelBlock[] = [];
+
     if (postText) {
       contentNodes.push({
         nodeType: BLOCKS.PARAGRAPH,
-        content: [{ nodeType: 'text', value: postText, marks: [], data: {} }],
+        content: [
+          {
+            nodeType: 'text',
+            value: postText,
+            marks: [],
+            data: {},
+          },
+        ],
         data: {},
       });
     }
+
     if (assetId) {
       contentNodes.push({
         nodeType: BLOCKS.EMBEDDED_ASSET,
         content: [],
-        data: { target: { sys: { type: 'Link', linkType: 'Asset', id: assetId } } },
+        data: {
+          target: {
+            sys: {
+              type: 'Link',
+              linkType: 'Asset',
+              id: assetId,
+            },
+          },
+        },
       });
     }
 
     const newDiscussion: DiscussionFields = {
       discussionId,
       title,
-      post: { nodeType: BLOCKS.DOCUMENT, data: {}, content: contentNodes },
+      post: {
+        nodeType: 'document',
+        data: {},
+        content: contentNodes,
+      } as RichTextDocument,
       posterUsername,
     };
 
     await createDiscussion(newDiscussion);
     onDiscussionAdded(newDiscussion);
+
+    // Reset form
     setIsOpen(false);
     setTitle('');
     setPostText('');
@@ -82,16 +118,51 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
 
   return (
     <div className={styles['add-discussion']}>
-      <button className={styles['button-discussion']} onClick={() => (posterId ? setIsOpen(!isOpen) : alert('Login to post.'))}>
+      <button
+        className={styles['button-discussion']}
+        onClick={() =>
+          posterId ? setIsOpen(!isOpen) : alert('Login to post.')
+        }
+      >
         {isOpen ? 'Cancel' : 'Start a Discussion'}
       </button>
+
       {isOpen && (
         <form onSubmit={handleSubmit} style={{ marginTop: '10px' }}>
-          <input type="text" placeholder="Title" value={title} onChange={e => setTitle(e.target.value)} required className={styles['discussion-input']} />
-          <textarea placeholder="Content..." value={postText} onChange={e => { setPostText(e.target.value); setCharCount(e.target.value.length); }} maxLength={2048} rows={5} className={styles['discussion-input']} />
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            className={styles['discussion-input']}
+          />
+          <textarea
+            placeholder="Content..."
+            value={postText}
+            onChange={(e) => {
+              setPostText(e.target.value);
+              setCharCount(e.target.value.length);
+            }}
+            maxLength={2048}
+            rows={5}
+            className={styles['discussion-input']}
+          />
           <small>{charCount}/2048</small>
-          <input type="file" accept="image/*,video/*" onChange={e => e.target.files && setFile(e.target.files[0])} />
-          <button type="submit" className={styles['button-submit']} disabled={!postText && !file}>Submit Discussion</button>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            onChange={(e) =>
+              e.target.files && setFile(e.target.files[0])
+            }
+          />
+          <button
+            type="submit"
+            className={styles['button-submit']}
+            disabled={!postText && !file}
+          >
+            Submit Discussion
+          </button>
         </form>
       )}
     </div>
