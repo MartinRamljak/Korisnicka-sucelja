@@ -13,6 +13,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
   const [charCount, setCharCount] = useState<number>(0);
   const [posterUsername, setUsername] = useState<string | null>(null);
   const [currentIDs, setCurrentIDs] = useState<number[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -67,6 +68,8 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
     if(!posterUsername)
         return
 
+    setIsSubmitting(true)
+
     try {
       if(movieId)
       {
@@ -115,6 +118,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
       console.error('Error fetching profile', err);
     }
 
+    setIsSubmitting(false);
     setComment('');
     setCharCount(0);
     setIsOpen(false);
@@ -136,12 +140,22 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
             rows={5}
             cols={50}
             className={styles['comment-input']}
+            disabled={isSubmitting}
           />
           <div>
             <small>{charCount}/2048 characters</small>
           </div>
-          <button type="submit" className={styles['button-submit']} disabled={charCount === 0}>
-            Submit Comment
+
+          {isSubmitting && (
+            <p className={styles['submitting-text']}>Submitting comment...</p>
+          )}
+
+          <button
+            type="submit"
+            className={styles['button-submit']}
+            disabled={charCount === 0 || isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Comment'}
           </button>
         </form>
       )}

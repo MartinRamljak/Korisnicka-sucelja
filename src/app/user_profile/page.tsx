@@ -61,7 +61,6 @@ export default function UserProfilePage() {
       }
 
       // Fetch participated discussions from contentful
-      console.log(data.participatedDiscussionsIDs)
       if (Array.isArray(data.participatedDiscussionsIDs) && data.participatedDiscussionsIDs.length > 0) {
         const discussions: DiscussionFields[] = await fetchDiscussionsByIds(data.participatedDiscussionsIDs)
 

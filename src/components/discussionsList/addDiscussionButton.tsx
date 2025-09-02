@@ -24,6 +24,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
   const [postText, setPostText] = useState('');
   const [charCount, setCharCount] = useState(0);
   const [file, setFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Get current user ID once on mount
   useEffect(() => {
@@ -55,6 +56,8 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
       alert('Please fill all required fields.');
       return;
     }
+
+    setIsSubmitting(true)
 
     let assetId: string | null = null;
     if (file) {
@@ -123,7 +126,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
       console.log('Discussion ID added successfully');
     }
 
-    // Reset form
+    setIsSubmitting(false);
     setIsOpen(false);
     setTitle('');
     setPostText('');
@@ -151,6 +154,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
             onChange={(e) => setTitle(e.target.value)}
             required
             className={styles['discussion-input']}
+            disabled={isSubmitting}
           />
           <textarea
             placeholder="Content..."
@@ -162,6 +166,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
             maxLength={2048}
             rows={5}
             className={styles['discussion-input']}
+            disabled={isSubmitting}
           />
           <small>{charCount}/2048</small>
           <input
@@ -171,13 +176,19 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
               e.target.files && setFile(e.target.files[0])
             }
             className={styles['discussion-input']}
+            disabled={isSubmitting}
           />
+
+          {isSubmitting && (
+            <p className={styles['submitting-text']}>Submitting discussion...</p>
+          )}
+
           <button
             type="submit"
             className={styles['button-submit']}
-            disabled={!postText && !file}
+            disabled={(!postText && (!file || charCount === 0)) || isSubmitting}
           >
-            Submit Discussion
+            {isSubmitting ? 'Submitting...' : 'Submit Discussion'}
           </button>
         </form>
       )}

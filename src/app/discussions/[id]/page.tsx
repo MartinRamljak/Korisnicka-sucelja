@@ -83,7 +83,7 @@ export default async function DiscussionPage({ params }: Props) {
     }
   }
 
-  const discussionId: number = typeof rawDiscussionId === 'number' ? rawDiscussionId : 0;
+  const discussionId: number | null = typeof rawDiscussionId === 'number' ? rawDiscussionId : null;
 
   return (
     <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white">
@@ -98,7 +98,7 @@ export default async function DiscussionPage({ params }: Props) {
           {post && documentToReactComponents(post, renderOptions)}
         </div>
 
-        {discussionId !== 0 && <Comments discussionId={discussionId} movieId={null} />}
+        {discussionId !== null && <Comments discussionId={discussionId} movieId={null} />}
       </div>
     </div>
   );

@@ -53,3 +53,9 @@
   border-color: var(--secondary);
   outline: none;
 }
+
+.submitting-text {
+  font-size: 0.9rem;
+  color: gray;
+  margin-bottom: 8px;
+}
