@@ -3,7 +3,7 @@ import { DiscussionSkeleton } from '../types/contentful';
 import { Entry } from 'contentful';
 
 export async function fetchDiscussionById(id: number): Promise<Entry<DiscussionSkeleton> | null> {
-  const query: Record<string, any> = {
+  const query: Record<string, string | number> = {
     content_type: 'discussion',
     limit: 1,
     'fields.discussionId': id,

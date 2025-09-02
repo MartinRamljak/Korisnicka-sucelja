@@ -1,13 +1,28 @@
 import React from 'react';
-import { BLOCKS } from '@contentful/rich-text-types';
+import { BLOCKS, Block } from '@contentful/rich-text-types';
 
-// Helper component to render embedded assets (image/video)
-const renderAsset = (node: any) => {
-  console.log('Rendering asset node:', node);
+type AssetFields = {
+  file?: {
+    url?: string;
+    contentType?: string;
+  };
+  title?: string;
+};
 
+type EmbeddedAssetNode = Block & {
+  data: {
+    target: {
+      fields?: AssetFields;
+    };
+  };
+};
+
+const renderAsset = (node: EmbeddedAssetNode): React.ReactNode => {
   const file = node.data.target?.fields?.file;
+  const title = node.data.target?.fields?.title || 'Image';
+
   if (!file || !file.url || !file.contentType) {
-    console.warn('No valid file found in node:', node);
+    console.warn('Invalid asset:', node);
     return null;
   }
 
@@ -15,7 +30,6 @@ const renderAsset = (node: any) => {
   const contentType = file.contentType;
 
   if (contentType.startsWith('image/')) {
-    const title = node.data.target.fields.title || 'Image';
     return (
       <img
         src={url}
@@ -39,6 +53,6 @@ const renderAsset = (node: any) => {
 
 export const renderOptions = {
   renderNode: {
-    [BLOCKS.EMBEDDED_ASSET]: (node: any) => renderAsset(node),
+    [BLOCKS.EMBEDDED_ASSET]: (node: unknown) => renderAsset(node as EmbeddedAssetNode),
   },
 };

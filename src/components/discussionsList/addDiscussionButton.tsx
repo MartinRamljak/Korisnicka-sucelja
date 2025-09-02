@@ -155,6 +155,7 @@ const AddDiscussion: React.FC<Props> = ({ onDiscussionAdded }) => {
             onChange={(e) =>
               e.target.files && setFile(e.target.files[0])
             }
+            className={styles['discussion-input']}
           />
           <button
             type="submit"
