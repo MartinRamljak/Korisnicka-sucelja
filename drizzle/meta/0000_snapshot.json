@@ -27,8 +27,8 @@
           "notNull": true,
           "default": "'{}'"
         },
-        "myReviewsIDs": {
-          "name": "myReviewsIDs",
+        "participatedDiscussionsIDs": {
+          "name": "participatedDiscussionsIDs",
           "type": "integer[]",
           "primaryKey": false,
           "notNull": true,

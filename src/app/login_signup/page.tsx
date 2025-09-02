@@ -44,7 +44,7 @@ export default function AuthPage() {
           username: username,
           created_at: new Date(),
           favoritesIDs: [],
-          myReviewsIDs: [],
+          participatedDiscussionsIDs: [],
         },
       ])
 
@@ -117,7 +117,7 @@ export default function AuthPage() {
                     Sign Up
                 </button>
               )}
-              <button className="button-toggle-login-signup" onClick={handleToggle}>{signup ? 'log in' : 'sign up'}</button>
+              <button className="button-toggle-login-signup" onClick={handleToggle}>{signup ? 'Log In' : 'Sign Up'}</button>
               {error && <p style={{ color: 'red' }}>{error}</p>}
               </>
           ) : (

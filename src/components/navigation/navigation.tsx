@@ -95,7 +95,6 @@ type Page = {
     const [authChecked, setAuthChecked] = useState(false)
     const [loading, setLoading] = useState(false)
 
-
     useEffect(() => {
       const getUser = async () => {
         setLoading(true)
@@ -141,3 +140,5 @@ type Page = {
       </nav>
     );
 }
+
+export default Navigation;

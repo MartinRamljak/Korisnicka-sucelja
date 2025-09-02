@@ -1,16 +1,24 @@
 import { createClient as createDeliveryClient } from 'contentful'; // Delivery API for reading data
 import { createClient as createManagementClient } from 'contentful-management'; // Management API for writing data
-import { MovieCommentFields, DiscussionCommentFields, MovieRatingFields } from '../types/contentful'
+import {
+  MovieCommentFields,
+  MovieCommentSkeleton,
+  DiscussionCommentFields,
+  DiscussionCommentSkeleton,
+  DiscussionFields,
+  DiscussionSkeleton,
+  MovieRatingFields,
+} from '../types/contentful';
 import { Node, Document as RichTextDocument } from '@contentful/rich-text-types';
 
 // Fetch the space and access token from environment variables
 const spaceId = process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID as string;
-const accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string; // Delivery API token
+const accessToken = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN as string;
 const managementAccessToken = process.env.NEXT_PUBLIC_CONTENTFUL_MANAGEMENT_ACCESS_TOKEN as string; // Management API token (server-side)
 
 // Check if required environment variables are set
 if (!spaceId || !accessToken || !managementAccessToken) {
-  throw new Error("Missing Contentful environment variables");
+  throw new Error('Missing Contentful environment variables');
 }
 
 // Create Contentful Delivery API client (for fetching data)
@@ -24,14 +32,10 @@ export const managementClient = createManagementClient({
   accessToken: managementAccessToken, // Use the Management API token here
 });
 
-// Function to create a movie comment entry
 export const createMovieComment = async (comment: MovieCommentFields) => {
   try {
-    // Get the space and environment
     const space = await managementClient.getSpace(spaceId);
     const environment = await space.getEnvironment('master');
-
-    // Create a new entry for the "movieComments" content type
     const entry = await environment.createEntry('movieComments', {
       fields: {
         movieId: { 'en-US': comment.movieId },
@@ -41,9 +45,7 @@ export const createMovieComment = async (comment: MovieCommentFields) => {
         posterId: { 'en-US': comment.posterId },
       },
     });
-
     await entry.publish();
-    console.log('Movie comment entry created:', entry);
     return entry;
   } catch (error) {
     console.error('Error creating movie comment entry:', error);
@@ -51,14 +53,10 @@ export const createMovieComment = async (comment: MovieCommentFields) => {
   }
 };
 
-// Function to create a discussion comment entry
 export const createDiscussionComment = async (comment: DiscussionCommentFields) => {
   try {
-    // Get the space and environment
     const space = await managementClient.getSpace(spaceId);
-    const environment = await space.getEnvironment('master'); 
-
-    // Create a new entry for the "discussionComments" content type
+    const environment = await space.getEnvironment('master');
     const entry = await environment.createEntry('discussionComments', {
       fields: {
         discussionId: { 'en-US': comment.discussionId },
@@ -68,10 +66,7 @@ export const createDiscussionComment = async (comment: DiscussionCommentFields) 
         posterId: { 'en-US': comment.posterId },
       },
     });
-
-    
     await entry.publish();
-    console.log('Discussion comment entry created:', entry);
     return entry;
   } catch (error) {
     console.error('Error creating discussion comment entry:', error);
@@ -79,54 +74,58 @@ export const createDiscussionComment = async (comment: DiscussionCommentFields) 
   }
 };
 
-export const generateUniqueCommentId = async (contentType: string, parentId: number): Promise<number | null> => {
-
-  const newestId = await returnNewestCommentId(contentType, parentId)
-
-  if(newestId)
-    return newestId + 1
-
-  return null
+export const generateUniqueCommentId = async (
+  contentType: string,
+  parentId: number
+): Promise<number> => {
+  const newestId = await returnNewestCommentId(contentType, parentId);
+  if (newestId !== null) return newestId + 1;
+  return 0;
 };
 
-const returnNewestCommentId = async (contentType: string, parentId: number): Promise<number | null> => {
+const returnNewestCommentId = async (
+  contentType: string,
+  parentId: number
+): Promise<number | null> => {
   try {
-    if(contentType == 'movieComments')
-    {
-      const query = {
+    let query: Record<string, unknown>;
+    let response;
+
+    if (contentType === 'movieComments') {
+      query = {
         content_type: 'movieComments',
-        movieId: parentId,
-        order: '-fields.commentId',
+        'fields.movieId': parentId,
+        order: ['-fields.commentId'],
         limit: 1,
-      }
-      const response = await contentfulClient.getEntries(query);
-      const entry = response.items[0];
-      return entry?.fields.commentId as number ?? null;
-    }
-    else if(contentType == 'discussionComments')
-    {
-      const query = {
+      };
+      response = await contentfulClient.getEntries<MovieCommentSkeleton>(query);
+    } else if (contentType === 'discussionComments') {
+      query = {
         content_type: 'discussionComments',
-        discussionId: parentId,
-        order: '-fields.commentId',
+        'fields.discussionId': parentId,
+        order: ['-fields.commentId'],
         limit: 1,
-      }
-      const response = await contentfulClient.getEntries(query);
-      const entry = response.items[0];
-      return entry?.fields.commentId as number ?? null;
+      };
+      response = await contentfulClient.getEntries<DiscussionCommentSkeleton>(query);
+    } else {
+      return null;
     }
-    return null;
+
+    const entry = response.items?.[0];
+    const commentId = entry?.fields?.commentId;
+
+    return typeof commentId === 'number' ? commentId : null;
   } catch (error) {
     console.error('Error checking comment ID:', error);
     return null;
   }
 };
 
-// Fetch existing rating for a movie by a user
-export const getMovieRating = async (movieId: number, userId: string | null): Promise<number | null> => {
+export const getMovieRating = async (
+  movieId: number,
+  userId: string | null
+): Promise<number | null> => {
   if (!userId) return null; // <-- handle case when user is not logged in
-  console.log(userId);
-
   try {
     const response = await contentfulClient.getEntries({
       content_type: 'movieRatings',
@@ -134,13 +133,10 @@ export const getMovieRating = async (movieId: number, userId: string | null): Pr
       'fields.userId': userId,
       limit: 1,
     });
-
     if (response.items.length > 0) {
       const rating = response.items[0].fields.rating;
       return rating as number;
     }
-
-    // User has not rated this movie yet
     return null;
   } catch (error) {
     console.error('Error fetching movie rating:', error);
@@ -148,61 +144,157 @@ export const getMovieRating = async (movieId: number, userId: string | null): Pr
   }
 };
 
-
-// Create or update a movie rating
 export const upsertMovieRating = async (rating: MovieRatingFields) => {
   try {
     const { movieId, userId, rating: value } = rating;
-
     // Use Delivery API to check if rating exists
     const existing = await contentfulClient.getEntries({
-      content_type: "movieRatings",
-      "fields.movieId": movieId,
-      "fields.userId": userId,
+      content_type: 'movieRatings',
+      'fields.movieId': movieId,
+      'fields.userId': userId,
       limit: 1,
     });
-
     // Get environment with Management API
     const space = await managementClient.getSpace(spaceId);
-    const environment = await space.getEnvironment("master");
+    const environment = await space.getEnvironment('master');
 
     if (existing.items.length > 0) {
-      // Update existing entry
       const entryId = existing.items[0].sys.id;
       const entry = await environment.getEntry(entryId);
-
-      entry.fields.rating = { "en-US": value };
-
+      entry.fields.rating = { 'en-US': value };
       const updated = await entry.update();
       await updated.publish();
-
-      
     } else {
       // Create new entry
-      const entry = await environment.createEntry("movieRatings", {
+      const entry = await environment.createEntry('movieRatings', {
         fields: {
-          movieId: { "en-US": movieId },
-          userId: { "en-US": userId },
-          rating: { "en-US": value },
+          movieId: { 'en-US': movieId },
+          userId: { 'en-US': userId },
+          rating: { 'en-US': value },
         },
       });
-
       await entry.publish();
     }
   } catch (error) {
-    console.error("Error upserting movie rating:", error);
+    console.error('Error upserting movie rating:', error);
     throw error;
   }
 };
 
-export function richTextToPlainText(node: Node | RichTextDocument): string {
-  if ('content' in node && Array.isArray(node.content)) {
-    return node.content.map(richTextToPlainText).join('');
+export function richTextToPlainText(node: Node | RichTextDocument | null | undefined): string {
+  if (!node || typeof node !== 'object') {
+    return '';
   }
 
+  // If the node has a 'value', return it first
   if ('value' in node && typeof node.value === 'string') {
     return node.value;
   }
 
+  // If it has 'content', recursively handle children
+  if ('content' in node && Array.isArray(node.content)) {
+    return node.content.map(richTextToPlainText).join('');
+  }
+
   return '';
+}
+
+export const createDiscussion = async (fields: DiscussionFields) => {
+  const space = await managementClient.getSpace(spaceId);
+  const environment = await space.getEnvironment('master');
+
+  const entry = await environment.createEntry('discussion', {
+    fields: {
+      discussionId: { 'en-US': fields.discussionId },
+      title: { 'en-US': fields.title },
+      post: { 'en-US': fields.post },
+      posterUsername: { 'en-US': fields.posterUsername },
+    },
+  });
+  await entry.publish();
+  return entry;
+};
+
+export const generateUniqueDiscussionId = async (): Promise<number> => {
+  try {
+    const response = await contentfulClient.getEntries<DiscussionSkeleton>({
+      content_type: 'discussion',
+      order: ['-sys.createdAt'], // Most recent discussion
+      limit: 1,
+    });
+    const latestId = response.items[0]?.fields?.discussionId;
+    return typeof latestId === 'number' ? latestId + 1 : 0;
+  } catch (err) {
+    console.error('Error generating unique discussion ID:', err);
+    return 1;
+  }
+};
+
+export const uploadImageAsset = async (file: File): Promise<string> => {
+  try {
+    const space = await managementClient.getSpace(spaceId);
+    const environment = await space.getEnvironment('master');
+
+    const upload = await environment.createUpload({
+      file: await file.arrayBuffer(),
+    });
+
+    const asset = await environment.createAsset({
+      fields: {
+        title: { 'en-US': file.name },
+        description: { 'en-US': 'Uploaded by user' },
+        file: {
+          'en-US': {
+            contentType: file.type,
+            fileName: file.name,
+            uploadFrom: {
+              sys: {
+                type: 'Link',
+                linkType: 'Upload',
+                id: upload.sys.id,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    await asset.processForAllLocales();
+
+    let processedAsset = await environment.getAsset(asset.sys.id);
+    while (!processedAsset.fields.file?.['en-US']?.url) {
+      await new Promise((res) => setTimeout(res, 1000));
+      processedAsset = await environment.getAsset(asset.sys.id);
+    }
+
+    const publishedAsset = await processedAsset.publish();
+
+    return publishedAsset.sys.id;
+  } catch (error) {
+    console.error('Error uploading asset:', error);
+    throw error;
+  }
+};
+
+function isRichTextDocument(obj: unknown): obj is RichTextDocument {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'nodeType' in obj &&
+    (obj as { nodeType?: unknown }).nodeType === 'document'
+  );
+}
+
+export function extractLocale<T>(value: Record<string, T> | T | undefined): T | undefined {
+  if (value == null) return undefined;
+
+  if (
+    typeof value !== 'object' ||
+    Array.isArray(value) ||
+    isRichTextDocument(value)
+  ) {
+    return value as T;
+  }
+
+  return (value as Record<string, T>)['en-US'] ?? Object.values(value as Record<string, T>)[0];
 }

@@ -12,6 +12,8 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
   const [commentText, setComment] = useState<string>('');
   const [charCount, setCharCount] = useState<number>(0);
   const [posterUsername, setUsername] = useState<string | null>(null);
+  const [currentIDs, setCurrentIDs] = useState<number[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -51,6 +53,7 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
 
       const data: UserProfile = await response.json();
       setUsername(data.username);
+      setCurrentIDs(data.participatedDiscussionsIDs)
     } catch (err) {
       console.error('Error fetching profile', err);
     }
@@ -65,45 +68,57 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
     if(!posterUsername)
         return
 
+    setIsSubmitting(true)
+
     try {
       if(movieId)
       {
-          const commentId = await generateUniqueCommentId('movieComments', movieId);
-          if(!commentId)
-            throw  new Error("Error generating unique commentId")
-          const newMovieComment = {
-              movieId: movieId,
-              commentId: commentId,
-              commentText: commentText,
-              posterUsername: posterUsername,
-              posterId: posterId || '',
-          };
+        const commentId = await generateUniqueCommentId('movieComments', movieId);
+        const newMovieComment = {
+            movieId: movieId,
+            commentId: commentId as number,
+            commentText: commentText,
+            posterUsername: posterUsername,
+            posterId: posterId || '',
+        };
 
-          await createMovieComment(newMovieComment);
-          alert("Comment added successfully!");
-          onCommentAdded(newMovieComment);
+        await createMovieComment(newMovieComment);
+        alert("Comment added successfully!");
+        onCommentAdded(newMovieComment);
       }
       else if(discussionId)
       {
-          const commentId = await generateUniqueCommentId('movieComments', discussionId);
-          if(!commentId)
-            throw  new Error("Error generating unique commentId")
-          const newDiscussionComment = {
-              discussionId: discussionId,
-              commentId: commentId,
-              commentText: commentText,
-              posterUsername: posterUsername,
-              posterId: posterId || '',
-          };
+        const commentId = await generateUniqueCommentId('discussionComments', discussionId);
+        const newDiscussionComment = {
+            discussionId: discussionId,
+            commentId: commentId as number,
+            commentText: commentText,
+            posterUsername: posterUsername,
+            posterId: posterId || '',
+        };
 
-          await createDiscussionComment(newDiscussionComment);
-          alert("Comment added successfully!");
-          onCommentAdded(newDiscussionComment);
+        await createDiscussionComment(newDiscussionComment);
+        alert("Comment added successfully!");
+        onCommentAdded(newDiscussionComment);
+
+        const updatedIDs = [...currentIDs, discussionId];
+
+        const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ participatedDiscussionsIDs: updatedIDs })
+        .eq('id', posterId);
+
+        if (updateError) {
+          console.error('Failed to update participatedDiscussionsIDs:', updateError);
+        } else {
+          console.log('Discussion ID added successfully');
+        }
       }
     } catch (err) {
       console.error('Error fetching profile', err);
     }
 
+    setIsSubmitting(false);
     setComment('');
     setCharCount(0);
     setIsOpen(false);
@@ -125,12 +140,22 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
             rows={5}
             cols={50}
             className={styles['comment-input']}
+            disabled={isSubmitting}
           />
           <div>
             <small>{charCount}/2048 characters</small>
           </div>
-          <button type="submit" className={styles['button-submit']} disabled={charCount === 0}>
-            Submit Comment
+
+          {isSubmitting && (
+            <p className={styles['submitting-text']}>Submitting comment...</p>
+          )}
+
+          <button
+            type="submit"
+            className={styles['button-submit']}
+            disabled={charCount === 0 || isSubmitting}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Comment'}
           </button>
         </form>
       )}

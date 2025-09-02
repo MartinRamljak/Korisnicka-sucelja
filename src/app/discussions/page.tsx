@@ -1,6 +1,7 @@
 import { Navigation } from "../../components/navigation/navigation";
 import Header from "../../components/header/header";
 import DiscussionsList from "@/src/components/discussionsList/discussionsList";
+import { Footer } from "@/src/components/footer/footer";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,6 +15,7 @@ export default function UserDiscussionsPage() {
       <Navigation />
       <h1 className="text-6xl font-extrabold tracking-tight">Discussions</h1>
       <DiscussionsList />
+      <Footer />
     </main>
   );
 }
