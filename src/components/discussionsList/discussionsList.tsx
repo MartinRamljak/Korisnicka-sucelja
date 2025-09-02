@@ -12,8 +12,15 @@ import type { Document as RichTextDocument } from '@contentful/rich-text-types';
 
 function extractLocale<T>(value: Record<string, T> | T | undefined): T | undefined {
   if (value == null) return undefined;
-  if (typeof value !== 'object' || Array.isArray(value)) return value as T;
-  // prefer en-US, fallback to any other locale
+
+  if (
+    typeof value !== 'object' ||
+    Array.isArray(value) ||
+    ('nodeType' in value && (value as any).nodeType === 'document')
+  ) {
+    return value as T;
+  }
+
   return (value as Record<string, T>)['en-US'] ?? Object.values(value as Record<string, T>)[0];
 }
 
@@ -29,9 +36,6 @@ const DiscussionsList: React.FC = () => {
         include: 2,
         limit: 50,
       });
-
-      console.log('Total entries', response.total);
-      console.log('Returned items', response.items.length);
 
       const mapped = response.items.map(item => {
         const f = item.fields;

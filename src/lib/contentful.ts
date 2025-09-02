@@ -46,7 +46,6 @@ export const createMovieComment = async (comment: MovieCommentFields) => {
       },
     });
     await entry.publish();
-    console.log('Movie comment entry created:', entry);
     return entry;
   } catch (error) {
     console.error('Error creating movie comment entry:', error);
@@ -68,7 +67,6 @@ export const createDiscussionComment = async (comment: DiscussionCommentFields) 
       },
     });
     await entry.publish();
-    console.log('Discussion comment entry created:', entry);
     return entry;
   } catch (error) {
     console.error('Error creating discussion comment entry:', error);
@@ -188,12 +186,14 @@ export function richTextToPlainText(node: Node | RichTextDocument | null | undef
     return '';
   }
 
-  if ('content' in node && Array.isArray(node.content)) {
-    return node.content.map(richTextToPlainText).join('');
-  }
-
+  // If the node has a 'value', return it first
   if ('value' in node && typeof node.value === 'string') {
     return node.value;
+  }
+
+  // If it has 'content', recursively handle children
+  if ('content' in node && Array.isArray(node.content)) {
+    return node.content.map(richTextToPlainText).join('');
   }
 
   return '';
