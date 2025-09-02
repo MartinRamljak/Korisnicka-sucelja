@@ -10,13 +10,22 @@ import Link from 'next/link';
 import React from 'react';
 import type { Document as RichTextDocument } from '@contentful/rich-text-types';
 
+function isRichTextDocument(obj: unknown): obj is RichTextDocument {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'nodeType' in obj &&
+    (obj as { nodeType?: unknown }).nodeType === 'document'
+  );
+}
+
 function extractLocale<T>(value: Record<string, T> | T | undefined): T | undefined {
   if (value == null) return undefined;
 
   if (
     typeof value !== 'object' ||
     Array.isArray(value) ||
-    ('nodeType' in value && (value as any).nodeType === 'document')
+    isRichTextDocument(value)
   ) {
     return value as T;
   }
