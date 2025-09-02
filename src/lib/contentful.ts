@@ -77,10 +77,10 @@ export const createDiscussionComment = async (comment: DiscussionCommentFields) 
 export const generateUniqueCommentId = async (
   contentType: string,
   parentId: number
-): Promise<number | null> => {
+): Promise<number> => {
   const newestId = await returnNewestCommentId(contentType, parentId);
   if (newestId !== null) return newestId + 1;
-  return null;
+  return 0;
 };
 
 const returnNewestCommentId = async (
@@ -223,7 +223,7 @@ export const generateUniqueDiscussionId = async (): Promise<number> => {
       limit: 1,
     });
     const latestId = response.items[0]?.fields?.discussionId;
-    return typeof latestId === 'number' ? latestId + 1 : 1;
+    return typeof latestId === 'number' ? latestId + 1 : 0;
   } catch (err) {
     console.error('Error generating unique discussion ID:', err);
     return 1;

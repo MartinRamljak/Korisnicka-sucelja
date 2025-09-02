@@ -71,11 +71,9 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
       if(movieId)
       {
         const commentId = await generateUniqueCommentId('movieComments', movieId);
-        if(!commentId)
-          throw  new Error("Error generating unique commentId")
         const newMovieComment = {
             movieId: movieId,
-            commentId: commentId,
+            commentId: commentId as number,
             commentText: commentText,
             posterUsername: posterUsername,
             posterId: posterId || '',
@@ -88,11 +86,9 @@ const AddComment: React.FC<{movieId: number | null, discussionId: number | null,
       else if(discussionId)
       {
         const commentId = await generateUniqueCommentId('discussionComments', discussionId);
-        if(!commentId)
-          throw  new Error("Error generating unique commentId")
         const newDiscussionComment = {
             discussionId: discussionId,
-            commentId: commentId,
+            commentId: commentId as number,
             commentText: commentText,
             posterUsername: posterUsername,
             posterId: posterId || '',
