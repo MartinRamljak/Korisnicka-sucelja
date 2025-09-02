@@ -18,8 +18,8 @@
 
 ### Semester Project
 
-- Link to your production version: [**Production Version**](URL_TO_PRODUCTION_VERSION)
-- Link to your final report: [**Final Report**](URL_TO_FINAL_REPORT)
+- Link to your production version: [**Production Version**](https://korisnicka-sucelja-eight.vercel.app/)
+- Link to your final report: [**Final Report**](https://www.notion.so/Movie-Review-261cdb721b57804f953cf1ba60d26c5c)
 
 ### Semester Assignments
 
